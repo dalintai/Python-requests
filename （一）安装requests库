@@ -1,0 +1,4 @@
+
+    Windows: 打开cmd命令行，输入pip install requests，等待安装完成即可
+    Linux: (建议使用Python3)，终端中输入pip3 install requests，等待安装完成即可
+    Mac: (建议使用Python3), sudo python3 -m pip install requests，等待安装完成即可
