@@ -1,0 +1,97 @@
+发送一个请求分3步：
+
+    1.组装请求： 请求可能包含url，params(url参数)，data(请求数据)，headers(请求头)，cookies等，最少必须有url
+    2.发送请求，获取响应：支持get，post等各种方法发送，返回的是一个响应对象
+    3.解析响应: 输出响应文本
+
+说明：用requests来进行get方式进行请求
+
+# coding:utf-8
+import requests
+u = ('https://www.baidu.com')
+r = requests.get(url=u)
+#输出网站的状态码
+print(r.status_code)
+#输出网站的text信息
+print(r.text)
+#输出网址的url的信息
+print（t.url）
+
+
+------------------
+说明：get方式带参数方式请求
+方法一：
+import requests
+u = ('https://www.baidu.com')
+v = {'kw':'1'}
+r = requests.get(url=u,params=v)
+print(r.url)
+
+方案二：
+import requests
+u = ('https://www.baidu.com/?kw=1')
+r = requests.get(url=u)
+print(r.url)
+
+最后输出结果：https://www.baidu.com/?kw=1
+
+
+------------------
+说明：用requests方式输出post请求
+
+方式一：
+传统表单类POST请求（x-www-form-urlencoded）:
+# coding:utf-8
+import requests
+url = "http://httpbin.org/post"
+data = {"name": "hanzhichao", "age": 18} # Post请求发送的数据，字典格式
+res = requests.post(url=url, data=data) # 这里使用post方法，参数和get方法一样
+print(res.text) 
+print(res.status_code)
+
+方式二：
+JSON类型的POST请求（application/json）
+import requests 
+
+url = "http://httpbin.org/post"
+data = '''{
+        "name": "hanzhichao",
+        "age": 18
+        }''' # 多行文本, 字符串格式，也可以单行（注意外层有引号，为字符串） data = '{"name": "hanzhichao", "age": 18}'
+res = requests.post(url=url, data=data) #  data支持字典或字符串
+print(res.text)  
+
+说明：
+data参数支持字典格式也支持字符串格式，如果是字典格式，requests方法会将其按照默认表单urlencoded格式转换为字符串，如果是字符串则不转化
+如果data以字符串格式传输需要遵循以下几点：
+
+    必须是严格的JSON格式字符串，里面必须用双引号，k-v之间必须有逗号，布尔值必须是小写的true/false等等
+    不能有中文，直接传字符串不会自动编码
+
+一般来说，建议将data声明为字典格式（方便数据添加修改），然后再用json.dumps()方法把data转换为合法的JSON字符串格式
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
