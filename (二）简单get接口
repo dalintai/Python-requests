@@ -1,0 +1,46 @@
+发送一个请求分3步：
+
+    1.组装请求： 请求可能包含url，params(url参数)，data(请求数据)，headers(请求头)，cookies等，最少必须有url
+    2.发送请求，获取响应：支持get，post等各种方法发送，返回的是一个响应对象
+    3.解析响应: 输出响应文本
+
+说明：用requests来进行get方式进行请求
+
+# coding:utf-8
+import requests
+u = ('https://www.baidu.com')
+r = requests.get(url=u)
+#输出网站的状态码
+print(r.status_code)
+#输出网站的text信息
+print(r.text)
+#输出网址的url的信息
+print（t.url）
+
+
+------------------
+说明：get方式带参数方式请求
+方法一：
+import requests
+u = ('https://www.baidu.com')
+v = {'kw':'1'}
+r = requests.get(url=u,params=v)
+print(r.url)
+
+方案二：
+import requests
+u = ('https://www.baidu.com/?kw=1')
+r = requests.get(url=u)
+print(r.url)
+
+最后输出结果：https://www.baidu.com/?kw=1
+
+
+
+
+
+
+
+
+
+
