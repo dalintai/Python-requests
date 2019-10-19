@@ -1,0 +1,62 @@
+一、get请求
+格式：requests.get(url,params)
+
+#导包
+import requests
+
+#调用get
+u = "http://www.baidu.com"
+r = requests.get(r)
+
+#输出
+#获取url地址
+print（"请求url：",r.url）
+#获取状态码
+print("获取状态码：",r.status_code)
+#获取响应文本
+print("获取响应文本：",r.text)
+
+
+二、get带参数请求-字典形式（params）
+u = "http://www.baidu.com"
+#参数需要用字典形式变现，字典形式用花括号
+canshu = {"id":"1001"}
+r = requests.get(u,parmas=canshu)
+print("响应地址：",r.url)
+print("响应响应码：",r.status_code)
+print("响应文本：",r.text)
+
+二-（1）多参数get传值-一个参数两个值-不推荐
+u = "http://www.baidu.com
+#里面套用列表的方式进行传值，列表用方括号
+canshu = {"id":[1001,1002]}
+r = requests.get(u,params=canshu)
+...
+
+结果：输出地址： http://www.baidu.com/?id=10001&id=1002
+  （2）多参数get传值-一个参数两个值-推荐
+u = "http://www.baidu.com
+#里面套用列表的方式进行传值，列表用方括号
+canshu = {"id":"1001,1002"}
+r = requests.get(u,params=canshu)
+...
+#逗号结果进行了转义
+结果：输出地址： http://www.baidu.com/?id=10001%2C1002
+  （2）多参数get传值-两个参数
+u = "http://www.baidu.com"
+canshu = {"id":"1001,1002","kw":"北京"}
+r = requests.get(u,params=canshu)
+...
+#kw中文：北京转码
+结果：输出地址： http://www.baidu.com/?id=1001%2C1002&kw=%E5%8C%97%E4%BA%AC
+
+三、get带参数请求-字符串形式-不推荐(params)
+u = "http://www.baidu.com"
+r = requests.get(u,params="id=1001")
+...
+结果：输出地址： http://www.baidu.com/?id=1001
+
+
+
+
+
