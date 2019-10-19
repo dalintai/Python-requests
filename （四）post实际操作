@@ -1,0 +1,26 @@
+一、post说明
+#可以通过ctrl+光标查看方法信息，点击可以查看库内详细信息
+格式：request.post(url,json,headers)
+
+
+import requests
+u = ("http://www.baidu.com")
+j = {
+    "p":"123",
+    "b":"31",
+    "c":["123,1233"]
+}
+hea = {"content-type":"application/json"}
+
+r = requests.post(url="http://www.baidu.com",json=j,headers=hea)
+print("响应地址：",r.url)
+print("响应状态码：",r.status_code)
+print("响应文本：",r.text)
+
+结果：响应地址： http://www.baidu.com/
+响应状态码： 302
+响应文本： <html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<style data-for="result" id="css_result">
+body{color:#333;background:#fff;padding:6px 0 0;margin:0;position:relative;min-width:900px}body,th,td,.p1,.p2{font-family:arial}p,form,ol,ul,li,dl,dt,dd,h3{margin:0;padding:0;list-style:none}input{padding-top:0;padding-bottom:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}table,img{border:0}td{font-size:9pt;line-height:18px}
