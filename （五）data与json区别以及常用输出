@@ -61,7 +61,36 @@ json
   结果：输出响应cookices中BDORZ的值： 27315
 
 
-
+五、通过content保存文件
+说明：当响应是一个图片的时候，我们通过text是没办法进行查看的，所以我们可以将其转码为字节形式，然后我们把字节形式的文件保存在本地，存为图片
+举例：
+import requests
+u = "http://www.baidu.com/img/bd_logo1.png"
+r = requests.get(url=u)
+print("输出响应地址：",r.url)
+print("输出响应状态码：",r.status_code)
+#text格式的图片其实显示的是乱码格式
+#print("输出text格式："r.text)
+#说明：对于with as的用法是相比于基本文件方法更为方便，方法二就是常规文件方法
+#方法一：
+try:
+  print("输出节码格式："r.content)
+  #将节码的方式写入文件，命名为baidu.png
+  write open("./baidu.png","wb") as f:
+    f.write(r.content)
+except:
+  print("节码失败")
+  
+#方法二：
+try:
+  #首先使用open打开文件，然后使用wb进行二进制写模式打开，rb是二进制读模式打开
+  wenjian = open("./baidu2.png","wb")
+  #然后对r.content进行写模式
+  wenjian.write(r.content)
+  #关闭文件权柄
+  wenjain.close()
+except:
+  print("字节编码读取失败")
 
 
 
