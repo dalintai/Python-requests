@@ -6,14 +6,36 @@
 格式：
   session = requests.session()
   通过上面方式我们就可以获得session了，然后再后面的post，get，put，delete中都可以进行使用了。
+  示例：
+    session.post()
+    session.get()
+    session.put()
+    session.delete()
   
  1.导包
  import requests
  
  2.请求
- u = "http://www.baidu.com"
- r = requests.get(url=u)
  sess = requests.session()
+ #获取session接口
+ u = "http://www.baidu.com"
+sess.get(url=u)
+
  
- 3.调用
- 
+ 3.调用登录
+ u_login = "http://www.baidu.com/1"
+ data = {
+          "canshu1":"123",
+          "sanshu2":"1234",
+          "sanchu3":["123,1234"]
+         }
+r = session.post(url=u_login,data=data)
+print(r.url)
+print(r.status_code)
+print(r.text)
+print(r.json())
+
+注意：
+  1.首先session获取的时候，没有使用requests，而是直接session.get(url)
+  2.第二就是我们在实际调用请求的时候也是没有再调用requests，而是r = session.post(url=url_login,data=data)
+
