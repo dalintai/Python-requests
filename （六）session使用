@@ -1,0 +1,19 @@
+一、介绍
+说明：我们可以通过cookies来进行登录后的操作，但是接下来每个接口都需要调用，所以我们使用session进行方便使用，同时，session在整个会话中都会保持。
+会话是指客户端向服务端发起后，直至结束。
+
+二、session方法
+格式：
+  session = requests.session()
+  通过上面方式我们就可以获得session了，然后再后面的post，get，put，delete中都可以进行使用了。
+  
+ 1.导包
+ import requests
+ 
+ 2.请求
+ u = "http://www.baidu.com"
+ r = requests.get(url=u)
+ sess = requests.session()
+ 
+ 3.调用
+ 
