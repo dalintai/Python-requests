@@ -1,0 +1,38 @@
+一、环境说明
+  说明：主要使用了DVWA平台测试测试任务有2个：
+    1.登录
+    2.进入首页
+    解释：
+      1.登录正确状态是利用post进行登录，但是实际中，登录成功后未返回数据，状态改为302，说明发生了重定向
+      登录参数有账号，密码，等级，user_token，这些我们是直接通过浏览器获取的。
+      2.首页问题较大，因为没有任何参数，主要依靠cookies来进行登录的，所以我们需要获取cookies
+ 二、问题
+  1.首先登录失败，状态码都是200，并没有正确返回302，通过jmeter测试（先用jmeter请求，根据成功信息进行对比，考虑点：参数，cookie管理器，
+    是否允许重定向，响应是否正确，提交方式），然后进行对比调整。
+  2.登录首页是要是cookies的调用，而调用有两个方式，第一个就是直接通过浏览器获取然后使用，第二个就是我们借助其他接口先进行获取，然后再调用。
+  
+三、解决
+  1.登录我们再解决中，通过jmeter发现，如果允许重定向（跟随与自动）就会返回200，不允许就会正确找到302，所以我们在接口的过程中设置不允许重定向。
+  代码如下：
+  u = "http://127.0.0.1/dvwa/login.php"
+  data = {"username":"admin","password":"password","Login":"Login","user_token":"3e894c14e6963a479b768097f81e2d16"}
+  #需要在最后的type中设置重定向，默认为允许，allow_redirects
+  r = requests.get(url=u,data=data,allow_redirects=False)
+  print(r.status_code)
+  这个时候我们就会发现正确返回了302
+  
+  2.首页我们使用的是第一种获取cookies方法，就是通过浏览器获得
+  代码如下：
+  u_shouye = "http://127.0.0.1/dvwa/index.php"
+  #格式一定是要字典（dist）形式，加花括号
+  cookies = {"PHPSESSID":"dmkt3q5caccsenr249jfhedlst"}
+  
+  r2 = requests.post(url=u_shouye,cookies=cookies)
+  print(r2.status_code)
+  print(r2.text)
+  
+  =========================
+  方法二暂时还没搞通
+  
+  
+  
