@@ -1,0 +1,159 @@
+一、说明
+总结注意：
+  1.必须要有herders
+  2.保险起见要添加cookies，而cookies在header里面就有
+  3.https保险起见要设置
+  
+  说明：我在做百度的get请求时候，按照以下代码：
+
+# coding:utf-8
+import requests
+
+def baidu():
+    u = "https://www.baidu.com/s?wd=python%20requests%20%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6&rsv_spt=1&rsv_iqid=0x9389d6b700084ac2&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=ib&rsv_sug3=37&rsv_sug1=16&rsv_sug7=100&rsv_sug2=0&inputT=27461&rsv_sug4=30560"
+r = requests.get(
+        url = u
+        ）
+    r.encoding = "utf-8"
+    print(r.url)
+    print(r.status_code)
+    print(r.text)
+if __name__=="__main__":
+    baidu()
+    
+运行结果如下：
+https://www.baidu.com/s?wd=python%20requests%20%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6&rsv_spt=1&rsv_iqid=0x9389d6b700084ac2&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=ib&rsv_sug3=37&rsv_sug1=16&rsv_sug7=100&rsv_sug2=0&inputT=27461&rsv_sug4=30560
+200
+<html>
+<head>
+	<script>
+		location.replace(location.href.replace("https://","http://"));
+	</script>
+</head>
+<body>
+	<noscript><meta http-equiv="refresh" content="0;url=http://www.baidu.com/"></noscript>
+</body>
+</html>
+
+二、更改
+  我们对代码进行更改后，可以正常请求得到正确内容：
+# coding:utf-8
+import requests
+
+
+def baidu():
+    u = "https://www.baidu.com/s?wd=python%20requests%20%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6&rsv_spt=1&rsv_iqid=0x9389d6b700084ac2&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=ib&rsv_sug3=37&rsv_sug1=16&rsv_sug7=100&rsv_sug2=0&inputT=27461&rsv_sug4=30560"
+    header = {"User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}
+    cookies = {"Cookie":"PSTM=1494075250; BIDUPSID=7B1A82EAA8377332013FE553B485F595; MCITY=-300%3A; BAIDUID=83CF243C5EDAA7CDE69B7229EA104D8E:SL=0:NR=10:FG=1; BDUSS=gweDIzcH5sYzdhcEduQXl3OHg5MDhRUlhLSm1mMkJVM0Z2b0Y4Q1NTQk91dVpjRVFBQUFBJCQAAAAAAAAAAAEAAADnmuso0MLK1tChtO83MDk5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE4tv1xOLb9cd1; BD_UPN=13314352; H_PS_PSSID=; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=1; BD_CK_SAM=1; PSINO=2; BDRCVFR[gltLrB7qNCt]=mk3SLVN4HKm; sug=3; sugstore=0; ORIGIN=2; bdime=0; COOKIE_SESSION=8_0_7_3_9_4_1_1_7_3_202_3_516868_0_202_0_1572274762_0_1572274560%7C9%230_0_1572274560%7C1; BDORZ=FFFB88E999055A3F8A630C64834BD6D0; BDSVRTM=0; BDRCVFR[C0p6oIjvx-c]=I67x6TjHwwYf0"}
+
+    r = requests.get(
+        url = u ,
+        headers = header,
+        cookies = cookies
+
+    )
+    r.encoding = "utf-8"
+    print(r.url)
+    print(r.status_code)
+    print(r.text)
+if __name__=="__main__":
+    baidu()
+    
+ 说明：
+  1.我们添加了头部，以及cookies，就可以正常成功
+  
+ 三、优化
+ 1、HTTPS
+ 我们在对https进行请求时，会出现提示加密原因，我们有两个方法进行设置：
+ 方法一：
+ r.requests.get(url=u,params=None,verify=False)
+ verify=False这个方法是用来提示忽略安全证书的作用，但有时候也不会完全没问题。
+ 方法二：
+ #导入urllib3的包
+import urllib3
+urllib3.disable_warnings()
+
+2、响应乱码
+还是那个方法，通过encoding = "utf-8"
+
+代码如下：
+r.encoding = "utf-8"
+
+
+五、最终完整代码
+其中有两个方法可以实现，方法一就是直接将参数写到url里面，但这个只适用于get，方法二就是将参数提出来，然后用字典的方式放进去。
+
+方法一：
+代码如下：
+# coding:utf-8
+import requests
+import urllib3
+urllib3.disable_warnings()
+
+def baidu():
+    u = "https://www.baidu.com/s?wd=python%20requests%20%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6&rsv_spt=1&rsv_iqid=0x9389d6b700084ac2&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=ib&rsv_sug3=37&rsv_sug1=16&rsv_sug7=100&rsv_sug2=0&inputT=27461&rsv_sug4=30560"
+    header = {"User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}
+    cookies = {"Cookie":"PSTM=1494075250; BIDUPSID=7B1A82EAA8377332013FE553B485F595; MCITY=-300%3A; BAIDUID=83CF243C5EDAA7CDE69B7229EA104D8E:SL=0:NR=10:FG=1; BDUSS=gweDIzcH5sYzdhcEduQXl3OHg5MDhRUlhLSm1mMkJVM0Z2b0Y4Q1NTQk91dVpjRVFBQUFBJCQAAAAAAAAAAAEAAADnmuso0MLK1tChtO83MDk5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE4tv1xOLb9cd1; BD_UPN=13314352; H_PS_PSSID=; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=1; BD_CK_SAM=1; PSINO=2; BDRCVFR[gltLrB7qNCt]=mk3SLVN4HKm; sug=3; sugstore=0; ORIGIN=2; bdime=0; COOKIE_SESSION=8_0_7_3_9_4_1_1_7_3_202_3_516868_0_202_0_1572274762_0_1572274560%7C9%230_0_1572274560%7C1; BDORZ=FFFB88E999055A3F8A630C64834BD6D0; BDSVRTM=0; BDRCVFR[C0p6oIjvx-c]=I67x6TjHwwYf0"}
+
+    r = requests.get(
+        url = u ,
+        headers = header,
+        cookies = cookies
+
+    )
+    r.encoding = "utf-8"
+    print(r.url)
+    print(r.status_code)
+    print(r.text)
+if __name__=="__main__":
+    baidu()
+
+方法二：
+代码如下：
+# coding:utf-8
+import requests
+import urllib3
+urllib3.disable_warnings()
+
+def baidu():
+    u = "https://www.baidu.com/s"
+    header = {"User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}
+    cookies = {"Cookie":"PSTM=1494075250; BIDUPSID=7B1A82EAA8377332013FE553B485F595; MCITY=-300%3A; BAIDUID=83CF243C5EDAA7CDE69B7229EA104D8E:SL=0:NR=10:FG=1; BDUSS=gweDIzcH5sYzdhcEduQXl3OHg5MDhRUlhLSm1mMkJVM0Z2b0Y4Q1NTQk91dVpjRVFBQUFBJCQAAAAAAAAAAAEAAADnmuso0MLK1tChtO83MDk5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE4tv1xOLb9cd1; BD_UPN=13314352; H_PS_PSSID=; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=1; BD_CK_SAM=1; PSINO=2; BDRCVFR[gltLrB7qNCt]=mk3SLVN4HKm; sug=3; sugstore=0; ORIGIN=2; bdime=0; COOKIE_SESSION=8_0_7_3_9_4_1_1_7_3_202_3_516868_0_202_0_1572274762_0_1572274560%7C9%230_0_1572274560%7C1; BDORZ=FFFB88E999055A3F8A630C64834BD6D0; BDSVRTM=0; BDRCVFR[C0p6oIjvx-c]=I67x6TjHwwYf0"}
+    data = {
+        "wd":"python requests 上传文件",
+        "rsv_spt":"1",
+        "rsv_iqid":"0x9389d6b700084ac2",
+        "issp":"1",
+        "f":"8",
+        "rsv_bp":"1",
+        "rsv_idx":"2",
+        "ie":"utf - 8",
+        "tn":"baiduhome_pg",
+        "rsv_enter":"1",
+        "rsv_dl":"ib",
+        "rsv_sug3":"37",
+        "rsv_sug1":"16",
+        "rsv_sug7":"100",
+        "rsv_sug2":"0",
+        "inputT":"27461",
+        "rsv_sug4":"30560"
+    }
+    r = requests.get(
+        url = u ,
+        params=data,
+        headers = header,
+        cookies = cookies
+
+    )
+    r.encoding = "utf-8"
+    print(r.url)
+    print(r.status_code)
+    print(r.text)
+if __name__=="__main__":
+    baidu()
+
+
+
+
+
+
