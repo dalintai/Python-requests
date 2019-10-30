@@ -1,0 +1,98 @@
+一、上传文件
+说明：在进行接口测试时，进行文件上传实现，有两种实现方式，第一种就是普通的在post里面进行文件上传，第二种是对文件格式有做要求。
+
+方法一：直接进行文件上传
+格式;
+file = {"file":open("wenjian_path","rb")}
+然后就可以进行上传了，但是在实际上请求成功了，但是却没有上传成功，poatman也没有成功，提示一下信息：
+{
+    "code": 10006,
+    "message": "Current request is not a multipart request",
+    "success": false
+}
+意思是缺少了部分信息，因为用poatman方式上传是直接用的binary方式，也就是二进制方式，然后开发那边说要求需要用from-data方式，接下来就是第二种实现方式
+了。
+
+方法二：
+格式：
+file = {
+        'id':None,
+        "name": "CgpBwV249JqAIIyTAAAAaZuGwoo396.txt",
+        "originalName": "字典.txt",
+        "size": "105",
+        "extName": "txt",
+        "path": "C:\\Users\Mr_yang\\Desktop\\字典.txt",
+        "serviceName": "API-TREATMENT",
+        "createBy": "127",
+        #"createTime": "2019-10-30 10:25:30"
+        'file':(open('C:\\Users\Mr_yang\\Desktop\\ph.txt',"rb"))
+    }
+r = requests.post(url=u,files=file,headers=head)
+
+说明：在最后测试中，发现，其他的可以没有，最后 这行 'file':(open('C:\\Users\Mr_yang\\Desktop\\ph.txt',"rb"))一定要用字典方式。
+这里面的地段是通过poatman成功后获取的，同时，headers中一定不能有Content-Type
+因为：
+我将headers请求头里面的content-type属性注释了，如果加上了，则会报错，然后我把这个模拟请求抓包下来看了看，
+他自动加上了Content-Type: multipart/form-data; boundary=${bound}，所以这个boundary应该是上传文件
+的标识，上传文件的时候content-type会有一个默认值，我们不去指定，也就没问题了。
+————————————————
+
+博客地址：https://blog.csdn.net/qq_39802740/article/details/84257745
+
+二、以下是成功代码：
+# coding:utf-8
+import requests
+head = {
+        #"Content-Type":"application/x-www-form-urlencoded",
+        "User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/1.02.1907300 MicroMessenger/7.0.4 Language/zh_CN webview/",
+        #"Content-Type":"application/json;charset=UTF-8",
+        "Authorization":"Bearer c0327663-f332-49e1-b9e9-81e462e91337"
+    }
+u = "http://10.10.65.193:9000/api/v1/treatment/hospital/upload/inspection-report"
+#files = {'file':open('C:\\Users\Mr_yang\\Desktop\\字典.txt',"rb")}
+file = {
+        'id':None,
+        "name": "CgpBwV249JqAIIyTAAAAaZuGwoo396.txt",
+        "originalName": "字典.txt",
+        "size": "105",
+        "extName": "txt",
+        "path": "C:\\Users\Mr_yang\\Desktop\\字典.txt",
+        "serviceName": "API-TREATMENT",
+        "createBy": "127",
+        #"createTime": "2019-10-30 10:25:30"
+        'file':(open('C:\\Users\Mr_yang\\Desktop\\ph.txt',"rb"))
+    }
+r = requests.post(url=u,files=file,headers=head)
+r.encode = "utf-8"
+print(r.status_code)
+print(r.text)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
