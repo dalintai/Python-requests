@@ -3,6 +3,7 @@
   1.必须要有herders
   2.保险起见要添加cookies，而cookies在header里面就有
   3.https保险起见要设置
+  4.最好要有if __name__=="__main__":运行的主函数，因为使用eclipse的时候可以直接运行，但是用pycharm的时候就不行，结果是看不到输出的。
   
   说明：我在做百度的get请求时候，按照以下代码：
 
