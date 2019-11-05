@@ -1,0 +1,26 @@
+# coding:utf-8
+import requests
+u = "http://www.baidu.com"
+head = {
+    "content-type":"text/css"
+    }
+    
+data = {
+    "key":"value"
+    }  
+    
+def test():
+  r = r.requests.post(url=u,data=data,headers=head)
+  
+  print(r.status_code)
+  print(r.text)
+  dictxaingying = {"code":"200","message":"response"，"success":"Ture"}
+  #如果符合就不会显示
+  assert dictxiangying['success'] == 'Ture','匹配'
+  #如果不匹配就会显示错误
+  assert dictxiangying['success'] == 'Fail','不匹配'
+
+  
+    
+    
+    
