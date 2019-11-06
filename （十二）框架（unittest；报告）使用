@@ -1,0 +1,56 @@
+一、框架使用
+知识点：
+  1.生成报告的时候HTMLTestRunner导入方式不一样，最后主函数调用的时候也不一样
+  2.assertEqual断言方式
+
+# coding:utf-8
+import requests
+import unittest
+#方式一：
+import HTMLTestRunner
+#方式二：
+from HTMLTesRunner import HTMLTestRunner
+
+class jianshudemo(unittest.TestCase)
+  def setUp(self):
+    self.u = "https://www.jianshu.com/p/c8fb44c54da5"
+  def test_qingqiu(self):
+    head = {
+        "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0",
+        "Connection":"keep-alive"
+      }
+     cookie = {
+        "Cookie":"if_shakespeare=1; _ga=GA1.2.782807954.1493312285; sensorsdata2015jssdkcross=%7B%22distinct_id%22%3A%2215f9fda9860140-0887e037bbaaac-173b7740-1049088-15f9fda9861307%22%2C%22%24device_id%22%3A%2215f9fda9860140-0887e037bbaaac-173b7740-1049088-15f9fda9861307%22%2C%22props%22%3A%7B%22%24latest_traffic_source_type%22%3A%22%E8%87%AA%E7%84%B6%E6%90%9C%E7%B4%A2%E6%B5%81%E9%87%8F%22%2C%22%24latest_referrer%22%3A%22https%3A%2F%2Fwww.baidu.com%2Flink%22%2C%22%24latest_referrer_host%22%3A%22www.baidu.com%22%2C%22%24latest_search_keyword%22%3A%22%E6%9C%AA%E5%8F%96%E5%88%B0%E5%80%BC%22%2C%22%24latest_utm_source%22%3A%22recommendation%22%2C%22%24latest_utm_medium%22%3A%22seo_notes%22%2C%22%24latest_utm_campaign%22%3A%22maleskine%22%2C%22%24latest_utm_content%22%3A%22note%22%7D%2C%22first_id%22%3A%22%22%7D; __yadk_uid=D80Z1CkCqEbVnQrqu9FwKmnTQP1xGdwy; remember_user_token=W1sxNTI2MDM1Ml0sIiQyYSQxMSRCb2N4bWh2SEs0TUc0VlR6UHdUZmtPIiwiMTU3MzA0MjU4MC44NzY2ODQiXQ%3D%3D--2ee91482b13ada50f1ae1696bf55154abe253973; read_mode=day; default_font=font2; locale=zh-CN; _m7e_session_core=e4e2c4c076bd574cb19b42b6a3a8bcf5"
+        }
+      r = requests.get(url=self.u,headers=head,cookies=cookie)
+      r.encoding = "utf-8"
+      print(r.url)
+      print(r.status_code)
+      print(t.text)
+      #assertEqual方式是校验输出值是否等于最后的这个值，数字不能加引号，字符需要加引号，而且断言是完全匹配，不是模糊匹配
+      #self.assertEqual(r.status_code,200)
+   def treanDown(self):
+      pass
+  
+if __name__=="__main__":
+    testunit = unittest.TestSuite()
+    testunit.addTest(jianshudemo("test_qingqiu"))
+    fp = open('C:/Users/Administrator/Desktop/1234/get.html','wb')
+    #当使用方式一（import HTMLTestRunner）的时候，runner =  HTMLTestRunner.HTMLTestRunner(stream=fp...
+    runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
+                            title="接口测试报告",
+                            description="用例详情"
+                            )
+    #当使用方式二（from HTMLTesRunner import HTMLTestRunner）的时候，runner = HTMLTestRunner(stream=fp...
+    runner = HTMLTestRunner(stream=fp,
+                            title="接口测试报告",
+                            description="用例详情"
+                            )
+    runner.run(testunit)
+    fp.close
+      
+      
+      
+      
+      
+      
