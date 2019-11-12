@@ -1,1 +1,72 @@
-   
+# coding:utf-8
+import requests
+import unittest
+import HTMLTestRunner
+import rullib3
+rullib3.disable_warnings()
+class piliang(unittest.TestCase):
+   def setUp(self):
+      #self.u = "http://news.baidu.com/"
+      self.u = "http://news.baidu.com/passport"
+   def treanDown(self):
+      pass
+   def test_Case1(self):
+      head = {
+         "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0",
+         "Host":"news.baidu.com"
+      }
+      cookice = {
+        "Cookie":"PSTM=1494075250; BIDUPSID=7B1A82EAA8377332013FE553B485F595; MCITY=-300%3A; BAIDUID=83CF243C5EDAA7CDE69B7229EA104D8E:SL=0:NR=10:FG=1; BDUSS=gweDIzcH5sYzdhcEduQXl3OHg5MDhRUlhLSm1mMkJVM0Z2b0Y4Q1NTQk91dVpjRVFBQUFBJCQAAAAAAAAAAAEAAADnmuso0MLK1tChtO83MDk5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE4tv1xOLb9cd1; H_PS_PSSID=1433_21118_29568_29220"
+      }
+      r = requests.get(url=self.u,cookies=cookies,headers=head)
+      print(r.url)
+      print(r.status_code)
+      print(r.text)
+   def test_Case2(self):
+      r = requests.get(url=self.u)
+      print(r.url)
+      print(r.status_code)
+      print(r.text)
+   def test_Case3(self):
+      head = {
+         "Host":"www.baidu.com"
+         }
+      r = requests.get(url=self.u,headers=head)
+      print(r.url)
+      print(r.status_code)
+      print(r.text)
+
+if __name__=="__main__":
+   testunit = unittest.TestSuite()
+   testunit.addTest(piliang(test_Case1))
+   testunit.addTest(piliang(test_Case2))
+   testunit.addTest(piliang(test_Case3))
+   fp = open("C:/Users/Administrator/Desktop/1234/piliangtest.html","wb")
+      runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
+                                             title="批量自动执行",
+                                             description="详情")
+   runner.run(testunit)
+   fp.close()
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
