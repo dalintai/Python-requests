@@ -1,0 +1,55 @@
+一、线程并发
+方法一：
+  说明：先进行单线程，然后通过循环进行执行。
+
+# coding:utf-8
+import threading
+def test():
+  print("并发测试10次")
+def thd():
+  i = 0
+  while i <= 10:
+    r = threading.Thread(target=test)
+    i = i+1
+    t.start()
+    
+方法二：
+# coding:utf-8
+import threading
+def test():
+  print("并发测试20次")
+def thd():
+  Threads = []
+  for i in range(20):
+    t = threading.Thread(target=test)
+    Threads.append()
+  for t in Threads:
+    t.start()
+
+if __name__=="__main__":
+  thd()
+  
+
+方法三：
+
+# coding:utf-8
+import threading
+from datetime import *
+def test():
+  print(datetime.now())
+def thd():
+  Threads = []
+  for i in range(30):
+    t = threading.Thread(target=test)
+    Threads.addend(t)
+  for t in Threads:
+    t.start()
+    
+if __name__=="__main__":
+  thd()
+  
+  
+  
+  
+  
+  
