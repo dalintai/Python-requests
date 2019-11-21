@@ -139,8 +139,53 @@ head = {
 if __name__=="__main__":
   diagnosebill()
  
- 
- 
+注意：
+  整个代码中只用到了1个循环，当时想着data一个循环，输出一个循环，但是这样的话最后输出只能取最后一个值，那是因为data循环后没有存，只能最后保留出一个
+  最后的值，所以输出调用的也就是最后一个值。错误代码如下：
+  
+  
+  # coding-utf-8
+import requests
+import urllib3
+urllib3.disable_warnings()
+def xunhuna():
+    xh = {
+        "1234",
+        12345,
+        "adsfdsf",
+        "???"
+
+
+    }
+    u = "https://www.baidu.com"
+    head = {
+        "Content-Type":"text/html;charset=utf-8",
+        "Cookie":"PSTM=1494075250; BIDUPSID=7B1A82EAA8377332013FE553B485F595; MCITY=-300%3A; BAIDUID=83CF243C5EDAA7CDE69B7229EA104D8E:SL=0:NR=10:FG=1; BDUSS=gweDIzcH5sYzdhcEduQXl3OHg5MDhRUlhLSm1mMkJVM0Z2b0Y4Q1NTQk91dVpjRVFBQUFBJCQAAAAAAAAAAAEAAADnmuso0MLK1tChtO83MDk5AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAE4tv1xOLb9cd1; BD_UPN=13314352; BD_HOME=1; H_PS_PSSID=1433_21118_30186_29568_29220; sug=3; sugstore=0; ORIGIN=2; bdime=0; BDRCVFR[feWj1Vr5u3D]=I67x6TjHwwYf0; delPer=0; BD_CK_SAM=1; PSINO=2; BDSVRTM=24; WWW_ST=1574353276550",
+        "Host":"www.baidu.com",
+         "User-Agent":"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"
+            }
+    #这是对xh数据的循环       
+    for i in xh:
+        data = {
+            "wd":f"{i}"
+        }
+        #输出后可以看到正常的每个数据，但是后面调用的时候也只能调用最后的数据
+        print(data)
+    #while与for是一样的效果，但唯独while是循环5次，for是循环一次，因为data最后只有一个值，后期可以想办法将data的循环值存下来，然后调用，但这样
+    #其实原理是一样的
+    # a = 0
+    # while a<=5:
+    for c in data:
+
+        r = requests.get(url=u,params=data,headers=head,verify=False)
+        r.encoding = "utf-8"
+        print(r.url)
+        print(r.status_code)
+        #a=a+1
+    #print(r.text)
+
+if __name__=="__main__":
+    xunhuna()
  
  
  
