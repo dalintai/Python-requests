@@ -1,0 +1,160 @@
+一、背景
+说明：
+  在对一个接口进行测试的时候，出现需要参数化的情况，设想有两个
+  设想一：
+    将测试数据构造出来，然后给下面的data进行调用，主要依靠循环，当时想的是两个循环，但是层级错误，失败后调优成功。
+    
+  设想二：
+    想要通过本地excel进行构建，然后调用，但是没尝试，数据构造使用了搜嘎的方式。
+ 
+ 
+二、代码 
+ 方法一：
+ 
+# coding:utf-8
+import requests
+def diagnosebill():
+  u = "http://10.10.65.238:8080/api/v1/hospital/outpatientfee/push/outpatientfee"
+  head = {
+            "Content-Type":"application/json",
+            #"Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQzNjUyNjYsInVzZXJJZCI6IjEyNyIsImF1dGhvcml0aWVzIjpbImFkbWluIl0sImp0aSI6IjVkZTE0NWE4LTU1MTItNDU3Yy1hNDZjLTU3ODkyMDE4M2VmMCIsImNsaWVudF9pZCI6ImFwcCJ9.p7xWInqilJdaymcAaNu6VTbXJxd8DOy0JI_AxuwwIUQ"
+            "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODg1OTE0MjMxMSIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQzNDU2OTgsInVzZXJJZCI6IjExOTY5OTkwMjA2NjIyMzEwNDEiLCJhdXRob3JpdGllcyI6WyJ1c2VyIl0sImp0aSI6ImZiMmZlODQ0LThmMjktNDVjNy05ZTM3LWE5Nzk0NzU2M2U4NiIsImNsaWVudF9pZCI6ImFwcCJ9.W1BWB4UUxCio6yp4wVj_W-xGlIDd8VOOE9NT_Pk3zrQ"
+          }
+  liushui = {
+  
+            "cf123455560",
+            "cf123455561",
+            "cf123455562",
+            "cf123455563",
+            "cf123455564"
+          }
+#循环要包括以下所有，不然调用的时候只能取最后一个值，而不是全部          
+for i in liushui:
+  
+     data =  [
+                              {
+                                "outpatientFee": {
+                                  "amount": 0.02,
+                                  "deptCode": "pf-0010",
+                                  "deptName": "皮肤科",
+                                  "doctorId": "ly-03988",
+                                  "doctorName": "刘军",
+                                  "hospitalCode": "1181477348160311298",
+                                  "hospitalName": "赤峰市医院",
+                                  "patientEhc": "d8d6c47b-57c6-4ce7-b0b3-9b773ebe4b58",
+                                  "patientId": 39434,
+                                  "patientName": "王五",
+                                  
+                                  #调用liushui里面的数据
+                                  #同时所需要调用的字段内加f，格式：
+                                  #                  testdata="ceshi1"
+                                  #                  f"vaule是{testdata}"   
+                                  #参考博客：https://blog.csdn.net/s740556472/article/details/81111493
+                                  "paymentCode": f"{i}",
+                                  
+                                  "hospitalStatus": "1",
+                                  "caseNumber": "393939393939393"
+                                },
+                                "detailList": [
+                                  {
+                                    "amount": 0.2,
+                                    "code": "xy1",
+                                    "count": 2,
+                                    "name": "阿莫西林",
+                                    "price": 12
+                                  }
+                                ]
+                              }
+                            ]
+     r = requests.post(url=u,json=data,headers=head)
+     r.encoding = "utf-8"
+     print(r.status_code)
+     print(r.text)
+     
+if __name__=="__main__":
+  diagnosebill()
+  
+  
+  
+  方法二：
+  说明：
+      方法二是使用了搜嘎的优化，优化点：
+        1.不需要自己构造测试数据，因为测试数据是字符加数字
+        2.使用range直接取值，同时因为测试数据格式是：cf1234567，所以生成的同时还使用字符串添加在前面
+   
+# coding:utf-8
+import requests
+def diganosebill():
+u = "http://10.10.65.238:8080/api/v1/hospital/outpatientfee/push/outpatientfee"
+head = {
+     "Content-Type":"application/json",
+     #"Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQzNjUyNjYsInVzZXJJZCI6IjEyNyIsImF1dGhvcml0aWVzIjpbImFkbWluIl0sImp0aSI6IjVkZTE0NWE4LTU1MTItNDU3Yy1hNDZjLTU3ODkyMDE4M2VmMCIsImNsaWVudF9pZCI6ImFwcCJ9.p7xWInqilJdaymcAaNu6VTbXJxd8DOy0JI_AxuwwIUQ"
+     "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODg1OTE0MjMxMSIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQzNDU2OTgsInVzZXJJZCI6IjExOTY5OTkwMjA2NjIyMzEwNDEiLCJhdXRob3JpdGllcyI6WyJ1c2VyIl0sImp0aSI6ImZiMmZlODQ0LThmMjktNDVjNy05ZTM3LWE5Nzk0NzU2M2U4NiIsImNsaWVudF9pZCI6ImFwcCJ9.W1BWB4UUxCio6yp4wVj_W-xGlIDd8VOOE9NT_Pk3zrQ"
+          }
+ 
+ liushui = ['cf'+str(i) for i range(100000,199999)]
+ 
+ for a in liushui:
+  
+  data =  [
+                              {
+                                "outpatientFee": {
+                                  "amount": 0.02,
+                                  "deptCode": "pf-0010",
+                                  "deptName": "皮肤科",
+                                  "doctorId": "ly-03988",
+                                  "doctorName": "刘军",
+                                  "hospitalCode": "1181477348160311298",
+                                  "hospitalName": "赤峰市医院",
+                                  "patientEhc": "d8d6c47b-57c6-4ce7-b0b3-9b773ebe4b58",
+                                  "patientId": 39434,
+                                  "patientName": "王五",
+                                  
+                                  #调用liushui里面的数据
+                                  #同时所需要调用的字段内加f，格式：
+                                  #                  testdata="ceshi1"
+                                  #                  f"vaule是{testdata}"   
+                                  #参考博客：https://blog.csdn.net/s740556472/article/details/81111493
+                                  "paymentCode": f"{i}",
+                                  
+                                  "hospitalStatus": "1",
+                                  "caseNumber": "393939393939393"
+                                },
+                                "detailList": [
+                                  {
+                                    "amount": 0.2,
+                                    "code": "xy1",
+                                    "count": 2,
+                                    "name": "阿莫西林",
+                                    "price": 12
+                                  }
+                                ]
+                              }
+                            ]
+     r = requests.post(url=u,json=data,headers=head)
+     r.encoding = "utf-8"
+     print(r.status_code)
+     print(r.text)
+     
+if __name__=="__main__":
+  diagnosebill()
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
