@@ -187,9 +187,67 @@ def xunhuna():
 if __name__=="__main__":
     xunhuna()
  
+ ------------------------------------------------------------
  
- 
- 
+ 三、实际项目中的问题
+ 说明：在实际项目重，发现了两种调用的方式：
+ 一、参数化
+方式一：
+使用f{}方式
+相关博客：https://blog.csdn.net/s740556472/article/details/81111493
+实际代码：
+    reportdata = {
+            "M20160620000",
+            "M2016062001",
+            "M2016062002",
+            "M2016062003",
+            "M2016062004"
+            }
+    for i in reportdata:
+
+        data =[
+              {
+                "electronicHealthCode": "d8d6c47b-57c6-4ce7-b0b3-9b773ebe4b58",
+                #医院id：1181477348160311298
+                "hospitalId": "1181477348160311298",
+                "hospitalName": "赤峰市医院",
+                "departmentId": 32164,
+                "departmentName": "外科",
+                "subject": "脑CT",
+                "doctorId": 42134151,
+                "doctorName": "马斌",
+#参数调用方式
+                "reportNo": f"{i}",
+                #"reportNo": "M000000001",
+                "patientId": "1197001036993662978",
+                "patientName": "王五",
+                "caseNo": "1237891",
+方式二：
+    reportdata = {
+            "M20160620000",
+            "M2016062001",
+            "M2016062002",
+            "M2016062003",
+            "M2016062004"
+            }
+    for i in reportdata:
+
+        data =[
+              {
+                "electronicHealthCode": "d8d6c47b-57c6-4ce7-b0b3-9b773ebe4b58",
+                #医院id：1181477348160311298
+                "hospitalId": "1181477348160311298",
+                "hospitalName": "赤峰市医院",
+                "departmentId": 32164,
+                "departmentName": "外科",
+                "subject": "脑CT",
+                "doctorId": 42134151,
+                "doctorName": "马斌",
+#直接调用
+                "reportNo": i,
+                #"reportNo": "M000000001",
+                "patientId": "1197001036993662978",
+                "patientName": "王五",
  
  
  
