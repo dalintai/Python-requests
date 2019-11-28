@@ -1,0 +1,69 @@
+一、场景说明
+  在用locust做压力的时候，需要对报文进行参数化，第一种就是通过循环，今天的优化是直接将随机函数放在参数里面
+  
+  代码如下：
+  from locust import HttpLocust,TaskSet,task
+  
+#使用随机数一定要导入random包
+import random
+
+class UserBehavior(TaskSet):
+	@task
+	def jianyan(self):
+		head = {
+				"User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/1.02.1907300 MicroMessenger/7.0.4 Language/zh_CN webview/",
+				"Content-Type":"application/json",
+				#"Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQ5NDg4OTQsInVzZXJJZCI6IjEyNyIsImF1dGhvcml0aWVzIjpbImFkbWluIl0sImp0aSI6IjA4YmMyMjgzLTJmOTUtNDU5MS1hYTJiLWUxZDk2NDVmNTk1MCIsImNsaWVudF9pZCI6ImFwcCJ9.fKU-hP33ftQ8ueCv3dux9yHNkrjSHpY1rVKmyk8fEFk"
+				"Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQ5NjQwNTMsInVzZXJJZCI6IjEyNyIsImF1dGhvcml0aWVzIjpbImFkbWluIl0sImp0aSI6ImU5MWVmNzYyLWU0OTItNDc1MS1iZmQ4LTNmMTA0Yzk0YzIwZCIsImNsaWVudF9pZCI6ImFwcCJ9.2DoCJZfZ9TLAnriMp1_JCIN2q-koawrhYap9Je6qOwA"
+				}
+			
+		dump = ['x'+ str(a) for a in range(1000,9999)]
+		health = [
+			"d8d6c47b-57c6-4ce7-b0b3-9b773ebe4b58",
+			"7d2bdb3a-39ce-4de8-98eb-e9243ab04736",
+			"a97f917b-e983-4c75-a83f-01390f212525",
+			"a70793e0-1ea7-43b0-b556-9f39548023db",
+			"18676ec7-8bdf-4951-a620-3d83f49713ae"
+			]
+
+		for i in dump:
+			#for c in health: 
+			data = [
+					{
+						"inspectionReport":
+					{
+						"electronicHealthCode":"7d2bdb3a-39ce-4de8-98eb-e9243ab04736",
+						"hospitalId": "1181477348160311298",
+						"hospitalName": "赤峰市医院",
+						"departmentId": 32164,
+						"departmentName": "骨科",
+						"subject": "骨折",
+						"doctorId": 42134151,
+						"doctorName": "马文斌",
+            
+            #使用random包中的randint进行取随机数
+            #但是如果格式为X123456的话，前面是要加x的，那么首先需要进行字符格式说明
+            #格式如下：str(x)，
+            #同时还要对随机数进行格式说明，不然的话会报错，提示是随机数是int格式
+						"reportNo": str('x')+str(random.randint(200,250)),
+            
+						"status": "1",
+						"fileId": "1187563535543177217"
+					}
+					]
+				}
+		]
+
+			r = self.client.post("/api/v1/hospital/reports/push/inspection-reports",json=data,headers=head)
+			print(r.status_code)
+			print(data)
+			print(r.text)
+			
+class WebsiteUser(HttpLocust):
+		task_set = UserBehavior
+		min_wait = 3000
+		max_wait = 6000
+			
+			
+			
+			
