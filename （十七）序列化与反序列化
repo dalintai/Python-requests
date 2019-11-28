@@ -1,1 +1,53 @@
-递四方速递
+  在 Python 中的序列化是将 Python 的对象编码转换成 Json 格式的字符串，反序列化就是将 Json字符串转换成 Python对象。
+  Json（JavaScript Object Notation）是一种轻量的数据交换格式，JSON相对简洁，又可以清晰的描述数据结构、数据类型以及
+复杂的数据结构。它既能让人轻松地阅读，也比较方便机器的解析并且方便网路传输。在http中如果要传输json，http的头MIME 类型是 “application/json”。
+Python 提供了一个 Json 类，通过 Json 序列化后，会将对应的列表、字典等类型转换成字符串类型。反序列化会将 json 字符串处理成列表或者字典。那么下
+面我们以实际例子来说明一下如何使用Json库完成序列化和反序列化。现在我们以慕课网搜索性能关键字后的返回的 json 为例（我们可以看到头信息包含
+application/json）：
+
+示例代码：
+
+
+#!/usr/bin/env python 
+# -*- coding: utf-8 -*- 
+# @Time : 2019/8/5 4:11 PM 
+# @Author : Criss Chan # @Site : 
+# @File : search_hotwords_api.py 
+# @Software: PyCharm 
+# @instruction：search hotwords api 
+import json res= '{
+      "result":0,"data":[
+          {"word":"\u6027\u80fd\u6d4b\u8bd5"},
+          {"word":"\u6027\u80fd"},
+          {"word":"\u6027\u80fd\u4f18\u5316"},
+          {"word":"\u6027\u80fdce"},
+          {"word":"\u6027\u80fdc"}
+          ],
+          "msg":"\u6210\u529f"
+          }' 
+          print('反序列化：') 
+          dict = json.loads(res) 
+          print(dict)
+          #打印反序列化的dict 
+          print(type(dict))
+          #打印dict的类型 
+          print('序列化：') 
+          ser=json.dumps(dict) 
+          print(ser)
+          #打印序列化的ser 
+          print(type(ser))#打印ser的类型 
+          
+          ​    运行后：
+          ​    反序列化：
+          
+​    {‘result’: 0, ‘data’: [{‘word’: ‘性能测试’}, {‘word’: ‘性能’}, 
+        {‘word’: ‘性能优化’}, {‘word’: ‘性能ce’}, {‘word’: ‘性能c’}], ‘msg’: ‘成功’}
+​    <class ‘dict’>
+
+          
+           ​    序列化： 
+           
+​    {“result”: 0, “data”: [{“word”: “\u6027\u80fd\u6d4b\u8bd5”}, {“word”: “\u6027\u80fd”}, 
+      {“word”: “\u6027\u80fd\u4f18\u5316”}, {“word”: “\u6027\u80fdce”}, {“word”: “\u6027\u80fdc”}], “msg”: “\u6210\u529f”}
+      
+​    <class ‘str’>
