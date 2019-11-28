@@ -65,5 +65,128 @@ class WebsiteUser(HttpLocust):
 		max_wait = 6000
 			
 			
+
+优化点：
+
+说明：
+	循环的时候可以直接循环函数。
+代码如下：
+for i in range(10,20):
+	data = [
+		{
+		    "inspectionReport":
+		{
+		    "electronicHealthCode":"7d2bdb3a-39ce-4de8-98eb-e9243ab04736",
+		    "hospitalId": "1181477348160311298",
+		    ......
+		    
+		    =----
+======================================================================================
+--------------------------------------------------------------------------------------
+2019-11-28
+最终优化版：
+--------------------------------------------------------------------------------------
+======================================================================================
+
+
+
+代码如下：
+from locust import HttpLocust,TaskSet,task
+
+#注意点1：
+#导入random包才能使用随机数
+import random
+class UserBehavior(TaskSet):
+
+	#一定要加装饰器，负责无法执行，报错提示序列为空
+	@task
+	def jianyan(self):
+		head = {
+				"User-Agent":"Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1 wechatdevtools/1.02.1907300 MicroMessenger/7.0.4 Language/zh_CN webview/",
+				"Content-Type":"application/json",
+				#"Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQ5NDg4OTQsInVzZXJJZCI6IjEyNyIsImF1dGhvcml0aWVzIjpbImFkbWluIl0sImp0aSI6IjA4YmMyMjgzLTJmOTUtNDU5MS1hYTJiLWUxZDk2NDVmNTk1MCIsImNsaWVudF9pZCI6ImFwcCJ9.fKU-hP33ftQ8ueCv3dux9yHNkrjSHpY1rVKmyk8fEFk"
+				"Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJhZG1pbiIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzQ5NjQwNTMsInVzZXJJZCI6IjEyNyIsImF1dGhvcml0aWVzIjpbImFkbWluIl0sImp0aSI6ImU5MWVmNzYyLWU0OTItNDc1MS1iZmQ4LTNmMTA0Yzk0YzIwZCIsImNsaWVudF9pZCI6ImFwcCJ9.2DoCJZfZ9TLAnriMp1_JCIN2q-koawrhYap9Je6qOwA"
+				}
+			
+		#dump = ['x'+ str(a) for a in range(1000,9999)]
+		#health就是健康码，健康码相当于用户唯一标识
+		health = [
+			"d8d6c47b-57c6-4ce7-b0b3-9b773ebe4b58",
+			"7d2bdb3a-39ce-4de8-98eb-e9243ab04736",
+			"a97f917b-e983-4c75-a83f-01390f212525",
+			"a70793e0-1ea7-43b0-b556-9f39548023db",
+			"18676ec7-8bdf-4951-a620-3d83f49713ae"
+			]
+		
+		#i可以直接在range里面进行循环，也就是循环10到20
+		for i in range(10,20):
+			#c是对列表health中的5个参数进行循环
+			for c in health:
+				#可以加个输出产看c是不是正常对health进行了输出
+				print(c)
+				data = [
+					{
+						"inspectionReport":
+					{
+						#然后对用户健康码进行参数化
+						"electronicHealthCode":f"{c}",
+						"hospitalId": "1181477348160311298",
+						"hospitalName": "赤峰市医院",
+						"departmentId": 32164,
+						"departmentName": "全身体检套餐",
+						"subject": "内外全部保健检查",
+						"doctorId": 42134151,
+						"doctorName": "马文斌",
+						#接下来就是对生成的报告字段进行参数化，同时因为报告有格式问题，所以我们在加A之前，一定要
+						#进行类型说明，同时后面的数字也要进行字符说明，负责运行后会提示int defind，这样才能进行组合
+						#在对报告编号进行参数化的时候，通过了random.randint随机数生成报告，随机范围在200~250
+						"reportNo": str('A')+str(random.randint(200,250)),
+						"patientId": 118586392927745,
+						"patientName": "王五",
+						"caseNo": "1237860",
+						"specimenNo": "12798550",
+						"checkTime": "2019-10-20 16:12:32",
+						"submitTime": "2019-10-20 16:15:32",
+						"reportTime": "2019-10-21 10:15:15",
+						"status": "1",
+						"fileId": "1187563535543177217"
+					},
+						"details": [
+					{
+						"inspectionReportId": 1,
+						"name": "血小板压积",
+						"code": "XXBYJ",
+						"result": "7",
+						"flag": "1",
+						"unit": "%",
+						"reference": "1-7"
+						}
+	
+					]
+				}
+				]
+
+				r = self.client.post("/api/v1/hospital/reports/push/inspection-reports",json=data,headers=head)
+				print(r.status_code)
+				print(data)
+				print(r.text)
+			
+class WebsiteUser(HttpLocust):
+		task_set = UserBehavior
+		min_wait = 3000
+		max_wait = 6000
+			
+			
+			
+			
+
+
+
+
+
+
+
+
+
 			
 			
