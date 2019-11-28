@@ -41,10 +41,10 @@ class UserBehavior(TaskSet):
 						"doctorId": 42134151,
 						"doctorName": "马文斌",
             
-            #使用random包中的randint进行取随机数
-            #但是如果格式为X123456的话，前面是要加x的，那么首先需要进行字符格式说明
-            #格式如下：str(x)，
-            #同时还要对随机数进行格式说明，不然的话会报错，提示是随机数是int格式
+            					#使用random包中的randint进行取随机数
+            					#但是如果格式为X123456的话，前面是要加x的，那么首先需要进行字符格式说明
+            					#格式如下：str(x)，
+            					#同时还要对随机数进行格式说明，不然的话会报错，提示是随机数是int格式
 						"reportNo": str('x')+str(random.randint(200,250)),
             
 						"status": "1",
