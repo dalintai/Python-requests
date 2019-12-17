@@ -5,10 +5,102 @@
 
 ======================
 文件1
-=====================
+======================
 
 import unittest
-from seleniu 
+from selenium import webdriver
+from HTMLTestRunner import HTMLTestRunner
+from time import sleep
+
+class test1(unittest.TestCase):
+  def setUp(self):
+    option = webdriver.ChromeOptions()
+    option.arr_argument("headless")
+    driver = webdriver.Chrome(chrome.options=option)
+    #driver = webdriver.Chrome()
+    
+  def treanDown(self):
+    pass
+    
+  def test_ceshiwenjian1(self):
+    driver = self.driver
+    url = ("https://www.baidu.com")
+    driver.get(url)
+    driver.find_element_by_id("kw").send_keys("测试")
+    driver.find_element_by_id("su").click()
+    
+if __name__=="__main__":
+  unittest.main()
+
+======================
+文件2
+======================
+
+from selenium import webdriver
+from time import sleep
+import unittest
+
+class test2(unittest.TestCase):
+  def setUp(self):
+    option = webdriver.ChromeOptions()
+    option.arr_argument("headless")
+    driver = webdriver.Chrome(chrome.options=option)
+    url2 = ("http://www.jianshu.com")
+    
+  def treanDown(self)
+    time.sleep(2)
+    pass
+    
+  def test_jianshu(slef):
+    driver = self.driver
+    driver.get(url2)
+    driver.find_element_by_id_("asd")_send_keys("123")
+    driver.find_element_by_id("qwe").click()
+    
+if __name__=="__main__":
+  unittest.main()
+  
+======================
+__init__执行文件
+======================
+
+# coding:utf-8
+from selenium import webdriver
+from HTMLTestRunner import HTMLTestRunner
+import unittest
+import test1,test2
+
+#测试文件进行封装成一个测试套件
+piliang = unittest.TestSuite()
+#在进行批量执行的时候，主要是对文件以及里面的类型进行标识
+piliang.addTest(unittest.makeSuite(test1.TestCase1))
+piliang.addTest(unittest.makeSuite(test2.TestCase2))
+
+wenjian = open('C:\\Users\\Mr_yang\\Desktop\\Selenium脚本\\baogao.html','wb')
+
+ru = HTMLTestRunner(stream = wenjian,
+                    title='自动化测试报告',
+                    description='用例执行情况：')
+#ru = unittest.TextTestRunner()
+ru.run(piliang)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
