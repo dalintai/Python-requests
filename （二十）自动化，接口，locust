@@ -85,7 +85,19 @@ ru = HTMLTestRunner(stream = wenjian,
 ru.run(piliang)
 
 
+二、接口测试
+说明：
+1.使用unittest
 
+import unittest
+import requests
+from HTMLTestRunner import HTMLTestRunner
+import urllib3
+urllib3.disable_warnings()
+class jiekou(self):
+  def setUp(self):
+  u = ""
+  
 
 
 
