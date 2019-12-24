@@ -225,7 +225,116 @@ class jiekou(self):
   
    
 
+=======================================
+项目实例
+=======================================
+# coding:utf-8
+#from HTMLTestRunner import HTMLTestRunner
+import requests
+import unittest
+class allTestPort(unittest.TestCase):
+    def setUp(self):
+        self.u = "http://192.168.1.66:8080"
+    def treanDown(self):
+        pass
+    def test_cliniclist(self):
+        path = "/api/v1/resident/patient/list"
+        head = {
+                "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODg1OTE0MjMxMSIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzYwNzgzMDEsInVzZXJJZCI6IjEyMDM5MTU3ODU5ODUxNzU1NTMiLCJhdXRob3JpdGllcyI6WyJ1c2VyIl0sImp0aSI6IjM2ZDhjYWM3LTMxMWMtNDRiYi1hM2E4LTI3YjdiZmQ4YmI5OCIsImNsaWVudF9pZCI6ImFwcCIsInVzZXJuYW1lIjoiMTg4NTkxNDIzMTEifQ.nFPy0agpVWsRYNfJKejGDRz4QsCbpSM7AseK6mx7yfc"
+            }
+        r = requests.get(url=self.u+path,headers=head)
+        r.encoding = "utf-8"
+        print("获取就诊人列表：",r.url)
+        print(r.status_code)
+        print(r.text)
+     
+    def test_addclinic(self):
+         path ="/api/v1/resident/patient"   
+         head = {
+             "Content-Type":"application/json",
+             "Authorization":"bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiIxODg1OTE0MjMxMSIsInNjb3BlIjpbImFwcCJdLCJleHAiOjE1NzYwNzgzMDEsInVzZXJJZCI6IjEyMDM5MTU3ODU5ODUxNzU1NTMiLCJhdXRob3JpdGllcyI6WyJ1c2VyIl0sImp0aSI6IjM2ZDhjYWM3LTMxMWMtNDRiYi1hM2E4LTI3YjdiZmQ4YmI5OCIsImNsaWVudF9pZCI6ImFwcCIsInVzZXJuYW1lIjoiMTg4NTkxNDIzMTEifQ.nFPy0agpVWsRYNfJKejGDRz4QsCbpSM7AseK6mx7yfc"
+             }
+         data ={
+              # sex: '',
+              "patientName": "王五",
+              "idCard": "847590098767648371",
+              "phone": "18859142311",
+              #"childBirthday": '2019-11-1',
+              #"childSex": '1',
+              #"childIdCard": '
+               #"childName": '',
+              "cardType": '01',
+              "hospitalId": '',
+              "patientType": "1",
 
+            }
+                
+         r = requests.post(url=self.u+path,json=data,headers=head)
+         r.encoding = "utf-8"
+         print("添加就诊人：",r.url)
+         print(r.status_code)
+         print(r.text)
+         
+    #def test_     
+if __name__=="__main__":
+    unittest.main()
+#     testunit = unittest.TestSuite()
+#     testunit.addTest(allTestPort("test_cliniclist"))        
+        
+        
+        
+        
+        
+三、locust性能测试
+       
+==============================================
+项目实例
+==============================================
+
+# coding:utf-8
+from locust import HttpLocust,task,TaskSet
+import random
+import json
+class UserBehavior(TaskSet):
+	
+	def start_on(self):
+		u = "http://47.104.82.246/"
+		path = "/a/login"
+		data = {
+			"username":"admin",
+			"password":"8888"
+		}
+    #获取出session
+		self.session = HttpSession(self.host)
+		r = self.client.post(url=u+path,data=data)
+		print("状态码",r.status_code)
+		print(r.text)
+  #添加task装饰器，才能执行  
+	@task
+	def test_zhibo(self):
+		u = "http://47.104.82.246/"
+		url = "http://photoshare.ieds.com.cn/photolive/news/3236b0b5f23b4bb7a6e367f82c54b84a"
+		path = "/photolive/news/0a584d5cf51a421c9a3716f29e57f50b"
+		head = {
+			#"Cookie":"jeeplus.session.id=8600d233ee3b4e998b6d774cfbd306c8; JSESSIONID=D166F2731A4418F90D6076E8AE877D75",
+			"Cookie":"jeeplus.session.id=52cfc6a1777246c1ace6777afca46d93; JSESSIONID=DB815D710A159E552F9E33E28AE461E0",
+			"Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:66.0) Gecko/20100101 Firefox/66.0"
+			#"Host":"47.104.82.246"
+			
+		}
+    #通过session进行登录，如果单独登录，直接使用r = requests.client.get(url,headers,data)
+		r = self.session.get(url=url)
+		print("状态码:",r.status_code)
+		#print("响应：",r.text)
+class WebsiteUser(HttpLocust):
+	task_set = UserBehavior
+	min_wait = 3000
+	max_wait = 5000
+		
+		
+        
+        
+        
 
 
 
