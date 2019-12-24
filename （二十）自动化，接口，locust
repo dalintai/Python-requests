@@ -84,6 +84,131 @@ ru = HTMLTestRunner(stream = wenjian,
 #ru = unittest.TextTestRunner()
 ru.run(piliang)
 
+============================================================
+项目实例
+============================================================
+# coding:utf-8
+from selenium import webdriver
+import unittest
+from time import sleep
+from HTMLTestRunner import HTMLTestRunner
+class script1(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        #option = webdriver.ChromeOptions()
+        #option.arr_arugment("headless")
+        #driver = webdriver.ChromeOptions(chrome_options=option)
+        self.driver = webdriver.Chrome()
+        self.u = "http://47.104.24.205:8080/share/a/login"
+        self.driver.get(self.u)
+        #窗口全屏显示
+        self.driver.maximize_window()
+    @classmethod
+    def traenDownClass(self):
+        sleep(3)
+        pass
+        #self.driver.quit()
+    def test_Alogin(self):
+        driver = self.driver
+        driver.find_element_by_id("username").send_keys("admin")
+        driver.find_element_by_id("password").send_keys("ieds_0000")
+        #隐性等待
+        driver.implicitly_wait(3)
+        #driver = self.driver
+        driver.find_element_by_class_name("loginBtn").click()
+        driver.implicitly_wait(1)
+        #sleep(5)
+    def test_Bwline(self):
+        driver = self.driver
+        sleep(3)
+        driver.find_element_by_xpath("//*[@id='accordion0']/li[3]/div/a").click()
+        #将driver.find_element_by_link_text赋值给line，后面就可以直接调用
+        line = driver.find_element_by_link_text
+        line("双数值轴折线图").click()
+        #sleep(3)
+        driver.implicitly_wait(3)
+        line_path = driver.find_element_by_xpath
+        line_path("//*[@id='topMenuBox']/ul/li[3]").click()
+        sleep(3)
+    def test_Clive(self):
+        driver =self.driver
+        live = driver.find_element_by_link_text
+        live("我的直播间").click() 
+        sleep(3)
+        driver.switch_to.frame("mainFrame")
+        driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div/button").click()
+        driver.implicitly_wait(3)
+        driver.switch_to.default_content()
+        driver.implicitly_wait(3)
+    def test_Dmessage(self):
+        driver = self.driver
+        message = driver.find_element_by_xpath
+        sleep(3)
+#         sreach_windows = driver.current_window_handle
+#         all_handles = driver.window_handles
+#         for handle in all_handles:
+#             if handle != sreach_windows:
+#                  driver.switch_to.window(handle)
+#                  driver.find_element_by_id("title").send_keys("test")
+#                  sleep(2)
+#                  driver.find_element_by_id("sponsor").send_keys("test")
+#                  sleep(2)
+#                  driver.find_element_by_xpath("//*[@id='startTime']").click()
+#                  driver.find_element_by_xpath("//*[@id='layui-laydate1']/div[1]/div[2]/table/tbody/tr[4]/td[2]").click()
+#                  sleep(2)
+#                  driver.find_element_by_xpath("//*[@id='endTIme']").click()
+#                  driver.find_element_by_xpath("//*[@id='layui-laydate2']/div[1]/div[2]/table/tbody/tr[4]/td[3]").click()
+#                  driver.find_element_by_class_name("layui-layer-btn0").click()
+        driver.switch_to.frame("layui-layer-iframe1")
+        driver.find_element_by_id("title").send_keys("test")
+        sleep(3)
+        driver.find_element_by_id("sponsor").send_keys("test")
+        sleep(3)
+        message("//*[@id='startTime']").click()
+        message("//*[@id='layui-laydate1']/div[1]/div[2]/table/tbody/tr[4]/td[3]").click()
+        sleep(3)
+        message("//*[@id='endTIme']").click()
+        message("//*[@id='layui-laydate2']/div[1]/div[2]/table/tbody/tr[4]/td[4]").click()
+        driver.implicitly_wait(3)
+        driver.switch_to.default_content()
+        sleep(3)
+        driver.find_element_by_xpath("//*[@id='layui-layer1']/div[3]/a[1]").click()
+        driver.implicitly_wait(1)
+    def test_Eupload(self):
+        driver = self.driver
+        driver.switch_to.frame("mainFrame")
+        upload = driver.find_element_by_xpath
+        upload("//*[@id='contentTable']/tbody/tr[1]/td[5]/a[2]").click()
+        sleep(2)
+        upload("/html/body/div[1]/div/div[2]/div[1]/div/div/button").click()
+        upload("//*[@id='exampleModal']/div/div/div[2]/div[1]/div[1]/div/div[1]").send_keys("C:\\Users\Mr_yang\Desktop\25.jpg")
+  
+
+if __name__=="__main__":
+    #unittest.main()  
+    testunit = unittest.TestSuite()
+    testunit.addTest(script1("test_Alogin"))
+    testunit.addTest(script1("test_Bwline"))
+    testunit.addTest(script1("test_Clive"))
+    testunit.addTest(script1("test_Dmessage"))
+    testunit.addTest(script1("test_Eupload"))
+    script = open('C:/Users/Mr_yang/Desktop/Selenium脚本/demo-script/demo.html','wb')
+    fp = HTMLTestRunner(stream = script,
+                    title='自动化测试报告',
+                    description='用例执行情况：')
+    #ru = unittest.TextTestRunner()
+    fp.run(testunit)     
+    script.close
+    
+    
+    
+    
+    
+    
+    
+    
+        
+
 
 二、接口测试
 说明：
