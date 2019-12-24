@@ -201,7 +201,65 @@ if __name__=="__main__":
     script.close
     
     
-    
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+文件上传实例
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# coding:utf-8
+from selenium import webdriver
+import unittest
+from time import sleep
+class script2(unittest.TestCase):
+    @classmethod
+    def setUpClass(self):
+        #option = webdriver.ChromeOptions()
+        #option.arr_arugment("headless")
+        #driver = webdriver.ChromeOptions(chrome_options=option)
+        self.driver = webdriver.Chrome()
+        self.u = "http://47.104.24.205:8080/share/a/login"
+        self.driver.get(self.u)
+        self.driver.maximize_window()
+        self.driver.get(self.u)
+        self.driver.implicitly_wait(2)
+        flont = self.driver.find_element_by_id
+        flont("username").send_keys("admin")
+        flont("password").send_keys("ieds_0000")
+        self.driver.implicitly_wait(2)
+        self.driver.find_element_by_class_name("loginBtn").click()
+        
+    @classmethod
+    def traenDownClass(self):
+        sleep(3)
+        pass
+        self.driver.quit()
+    def test_Asetout(self):
+        driver = self.driver
+        driver.find_element_by_xpath("//*[@id='topMenuBox']/ul/li[3]").click()
+        driver.implicitly_wait(2)
+        driver.find_element_by_link_text("我的直播间").click()
+        sleep(2)
+	#进入iframe
+        driver.switch_to.frame("mainFrame")
+        driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/table/tbody/tr[1]/td[5]/a[2]").click()
+        driver.implicitly_wait(5)
+        sleep(2)
+        driver.find_element_by_xpath("/html/body/div[1]/div/div[2]/div[1]/div/div/button").click()
+        sleep(2)
+
+	#点击选择文件按钮，并选择上传的文件，如果提示转码问题，那就是文件路径有问题，以下是用eclipse编译器写的，尝试常规方式有：1。/；2。\\；3。\
+        driver.find_element_by_id("input-file").send_keys("C:/Users/Mr_yang/Desktop/25.jpg")
+        driver.implicitly_wait(5)
+
+	#点击上传按钮
+        driver.find_element_by_xpath("//*[@id='exampleModal']/div/div/div[2]/div[1]/a").click()
+        sleep(2)
+        
+        
+        
+if __name__=="__main__":
+    unittest.main()        
+
+        
+        
     
     
     
