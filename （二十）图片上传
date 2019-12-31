@@ -10,6 +10,8 @@
     1.文件上传时，参数名称
     2.文件上传时，文件上传的参数名称（就是与图片路径同一栏的）
     
+    参考博客：https://www.cnblogs.com/liulinghua90/p/9676790.html
+    
   但是在调整后上传时，会发生以下返回：
  {"success":true,"errorCode":"-1","msg":"操作成功","body":{},"object":"1/null/b89e8be456aa4b1fadbd0024b1081623.png"}
   然后发现中间的参数就是albumId（也就是前端显示的房间号），然后需要在data里面添加这个信息。然后返回正确。
