@@ -1,0 +1,60 @@
+一、背景说明
+
+说明：
+  在对一个图片上传的接口进行测试时，出现图片成功上传到服务器，但是未在前端页面展示出来，通过抓包发现以下区别：
+  正常上传：
+  {"success":true,"errorCode":"-1","msg":"操作成功","body":{},"object":"1/72d01b7d41684a77830bc7272160ddd2/b89e8be456aa4b1fadbd0024b1081623.png"}
+  脚本上传：
+  {"success":true,"errorCode":"-1","msg":"操作成功","body":{},"object":null}
+  说明脚本上传时，缺少object参数，然后使用jmeter上传时也会出现，接下来用jmeter调整成功，调整以下内容：
+    1.文件上传时，参数名称
+    2.文件上传时，文件上传的参数名称（就是与图片路径同一栏的）
+    
+  但是在调整后上传时，会发生以下返回：
+ {"success":true,"errorCode":"-1","msg":"操作成功","body":{},"object":"1/null/b89e8be456aa4b1fadbd0024b1081623.png"}
+  然后发现中间的参数就是albumId（也就是前端显示的房间号），然后需要在data里面添加这个信息。然后返回正确。
+注意：
+  有一个误区，就是在填写参数的时候，浏览器抓包字段名显示，并不正确，后面是通过jmeter请求（当时请求也是做的，但是可以从返回的响应看到字段名）时
+  进行调整的。
+
+
+# coding:utf-8
+import requests
+import unittest
+class shangchuan(unittest.TestCase):
+    def setUp(self):
+        self.u = "http://47.104.24.205:8080"
+        self.path = "/share/a/photo/picture/upload"
+        self.head = {
+            "Cookie":"jeeplus.session.id=73fbd19baa60445b898346430133bf6b",
+            #"Content-Type":"multipart/form-data; boundary=---------------------------27521722226298",
+            "Content-Disposition":"form-data"
+
+
+        }
+        self.files = {"pictures":open("C:/Users/Mr_yang/Desktop/123.png","rb")}
+        self.data =  {
+          #这个是与文件上传同一栏的参数名称
+            "filename":"pictures",
+            #这是通过jmeter成功后抓包得到的参数
+            "Referer":"123.png",
+            #文件类型
+            "Content-Type":"image/png",
+            #需要新增加的参数，这个就是返回响应中缺失的字段
+            "albumId":"72d01b7d41684a77830bc7272160ddd2",
+            #同上
+            "Referer":"http://47.104.24.205:8080/share/a/photo/picture/list?albumId=72d01b7d41684a77830bc7272160ddd2",
+
+        }
+    def tresnDown(self):
+        pass
+    def test_up(self):
+        r = requests.post(url=self.u+self.path,headers=self.head,data=self.data,files=self.files)
+        print(r.status_code)
+        print(r.url)
+        print(r.text)
+
+if __name__=="__main__":
+    unittest.main()
+
+
