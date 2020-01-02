@@ -19,7 +19,7 @@
   有一个误区，就是在填写参数的时候，浏览器抓包字段名显示，并不正确，后面是通过jmeter请求（当时请求也是做的，但是可以从返回的响应看到字段名）时
   进行调整的。
 
-
+   
 # coding:utf-8
 import requests
 import unittest
