@@ -1,5 +1,88 @@
+一、接口并发测试
+说明：
+  以下是第一个接口并发测试demo
 
 
+==============================
+2020-1-5
+接口并发初版demo
+更新点：
+1.注意，不建议用class，直接def开始，class无法最后执行（就算最后在做一个接口并发测试的框架，也未使用class！！）
+2.实现了第一版接口并发，核心代码示例如下：
+                    import threading
+                    from datetime import *
+                      ...
+                     def testcase1():
+                        u = "https://www.baidu.com"
+                        for i in range(10):
+                            r = requests.get(url=u+path)
+                            print(r.status_code)
+                            #获取当前时间
+                            print(datetime.now())
+                            #可以直接调用显示testcase2方法的内容
+                            testcase2()
+                            print("----------------")
+                        #print(r.text)
+                    def xiancheng():
+                        #新建可以空线程组
+                          Threads = []
+                          #循环5次线程
+                          for i in range(5):
+                              t = threading.Thread(target=testcase1)
+                              Threads.append(t)
+                          for t in Threads:
+                              t.start()
+                   说明：
+                      最后testcase1一共执行了50次，因为函数循环了10次，然后每次有5个线程组。
+                      
+                      
+==============================
 
-
-
+# coding:utf-8
+import requests
+import urllib3
+#可以获取当前时间
+from datetime import *
+import threading
+urllib3.disable_warnings()
+#class xinwen():
+def testcase1():
+        u = "https://news.baidu.com"
+        path = "/guoji"
+        for i in range(10):
+            r = requests.get(url=u+path)
+            print(r.status_code)
+            #print(r.url)
+            print(datetime.now())
+            #可以直接调用显示testcase2方法的内容
+            testcase2()
+            print("----------------")
+        #print(r.text)
+def testcase2():
+        print("测试数据")
+        #print(datetime.now())
+        #print("--------------")
+def xiancheng():
+        Threads = []
+        for i in range(1):
+          #在测试的过程中，target用上面的测试用例，加不加括号好像都可以使用
+            t = threading.Thread(target=testcase1)
+            Threads.append(t)
+        for t in Threads:
+            t.start()
+def xiancheng2():
+        Threads = []
+        for l in range(5):
+            #在测试的过程中，target用上面的测试用例，加不加括号好像都可以使用
+            c = threading.Thread(target=testcase2())
+            Threads.append(c)
+        for c in Threads:
+            c.start()
+if __name__=="__main__":
+    #如果加了class xinwen，运行方式就是要xinwen.testcase1()
+    #但是在使用class后，使用xinwen.xiancheng2的时候，会报错，说xiancheng2中的testcase2找不到，而且一直要运行在testcase1后面
+    #所以不建议直接使用class
+    testcase1()
+    #xiancheng2()
+    #可以在主函数中直接输出
+    print("end")
