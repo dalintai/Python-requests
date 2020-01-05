@@ -280,6 +280,7 @@ class jiekou(self):
 
 =======================================
 项目实例
+1.使用unittest框架
 =======================================
 # coding:utf-8
 #from HTMLTestRunner import HTMLTestRunner
