@@ -111,7 +111,7 @@ class script1(unittest.TestCase):
     def test_Alogin(self):
         driver = self.driver
         driver.find_element_by_id("username").send_keys("admin")
-        driver.find_element_by_id("password").send_keys("ieds_0000")
+        driver.find_element_by_id("password").send_keys("****")
         #隐性等待
         driver.implicitly_wait(3)
         #driver = self.driver
@@ -222,7 +222,7 @@ class script2(unittest.TestCase):
         self.driver.implicitly_wait(2)
         flont = self.driver.find_element_by_id
         flont("username").send_keys("admin")
-        flont("password").send_keys("ieds_0000")
+        flont("password").send_keys("****")
         self.driver.implicitly_wait(2)
         self.driver.find_element_by_class_name("loginBtn").click()
         
@@ -355,8 +355,8 @@ class UserBehavior(TaskSet):
 		u = "http://47.104.82.246/"
 		path = "/a/login"
 		data = {
-			"username":"admin",
-			"password":"8888"
+			"username":"****",
+			"password":"****"
 		}
     #获取出session
 		self.session = HttpSession(self.host)
