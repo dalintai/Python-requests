@@ -1,0 +1,102 @@
+一、说明：
+  在进行测试的过程中，利用多线程执行接口压力的话，有两个概念，一个是守护线程，一个是阻塞线程，以下是解释：
+    1.守护线程：
+      main()就是主线程，而守护线程就是，当子线程运行结束后，才会执行主线程，如果子线程未结束，则不会执行主线程
+      以下是示例代码：
+      # coding:utf-8
+      import requests
+      import threading
+      from datetime import *
+      def test():
+        sleep(2)
+        print("这是测试示例1")
+      def thd():
+        Threads = []
+        #循环10次
+        for i in range(10):
+          t = threading.Thread(target=test)
+          Threads.append(t)
+          #setDaemon就是守护线程
+          #setDaemon()默认是setDoaemon(Flase)
+          #必须要制定下setDaemon(Ture)才能起效
+          t.setDaemon(True)
+        for t in  Threads:
+          t.start()
+      if __name__=="__main__":
+          thd()
+          print(end)
+     
+    2.阻塞线程：
+      通过join()阻塞线程让主线程等待子线程执行完成后再执行，同时可以先执行主线程，然后等待子线程执行完毕，而且还能给子线程设置等待时间，等待时间内
+      完成子线程，如果未完成，将强制停止。以下是示例代码：
+      # coding:utf-8
+      import threading
+      from datetime import *
+      def test2():
+      #测试用例自身循环执行
+        for a in range(5):
+          print("这是示例代码2")
+      def thd2():
+        Threads = []
+        #循环10测
+        for i in range(10):
+          t  = threading.Thread(target=test2)
+          Threads.append(t)
+          t.setDaemon(True)
+        for t in Threads:
+          t.start()
+        for t in Thread:
+        #2秒之后子线程如果未执行完成，就强制关闭
+          t.join(2)
+          
+       if __name__=="__main__":
+          thd2()
+          print("end2")
+        
+==============================
+range函数解释：
+        
+备注：
+python range() 函数可创建一个整数列表，一般用在 for 循环中。
+函数语法
+
+range(start, stop[, step])
+
+参数说明：
+
+    start: 计数从 start 开始。默认是从 0 开始。例如range（5）等价于range（0， 5）;
+    stop: 计数到 stop 结束，但不包括 stop。例如：range（0， 5） 是[0, 1, 2, 3, 4]没有5
+    step：步长，默认为1。例如：range（0， 5） 等价于 range(0, 5, 1)
+
+实例
+>>>range(10)        # 从 0 开始到 10
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> range(1, 11)     # 从 1 开始到 11
+[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+>>> range(0, 30, 5)  # 步长为 5
+[0, 5, 10, 15, 20, 25]
+>>> range(0, 10, 3)  # 步长为 3
+[0, 3, 6, 9]
+>>> range(0, -10, -1) # 负数
+[0, -1, -2, -3, -4, -5, -6, -7, -8, -9]
+>>> range(0)
+[]
+>>> range(1, 0)
+[]
+
+以下是 range 在 for 中的使用，循环出runoob 的每个字母:
+>>>x = 'runoob'
+>>> for i in range(len(x)) :
+...     print(x[i])
+... 
+r
+u
+n
+o
+o
+b
+==============================
+        
+        
+        
+      
