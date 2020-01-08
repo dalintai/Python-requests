@@ -1,5 +1,7 @@
 一、说明：
-  在进行测试的过程中，利用多线程执行接口压力的话，有两个概念，一个是守护线程，一个是阻塞线程，以下是解释：
+  在进行测试的过程中，利用多线程执行接口压力的话，有两个概念，一个是守护线程，一个是阻塞线程，
+  注意：阻塞线程一定要在守护线程（setDaemon(True)）的基础下调用，不能直接使用join()
+  以下是解释：
     1.守护线程：
       main()就是主线程，而守护线程就是，当子线程运行结束后，才会执行主线程，如果子线程未结束，则不会执行主线程
       以下是示例代码：
@@ -16,10 +18,12 @@
         for i in range(10):
           t = threading.Thread(target=test)
           Threads.append(t)
+          
           #setDaemon就是守护线程
           #setDaemon()默认是setDoaemon(Flase)
           #必须要制定下setDaemon(Ture)才能起效
           t.setDaemon(True)
+          
         for t in  Threads:
           t.start()
       if __name__=="__main__":
@@ -46,6 +50,7 @@
         for t in Threads:
           t.start()
         for t in Thread:
+        
         #2秒之后子线程如果未执行完成，就强制关闭
           t.join(2)
           
