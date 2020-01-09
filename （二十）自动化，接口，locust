@@ -1,3 +1,7 @@
+备注：
+ unittest框架适用于selenium自动化， 接口测试，而locust与接口并发不适用，切记不要总是倒入unittest框架。
+
+
 一、selenium自动化格式：
 1.使用unittest框架
 2.生成报告
