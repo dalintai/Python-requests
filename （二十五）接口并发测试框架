@@ -1,1 +1,76 @@
+一、说明
+  涉及以下几个知识点：
+    1.新增workinf函数，主要是用来批量执行test
+    2.请求百度一定要加headers，为了保险起见可以在加上urllib3
+    3.同时使用了阻塞线程
+    *4.后面可以在main主函数中再添加写入文件等操作
+    注意：
+      未使用uniottest框架，接口并发不建议使用unittest框架，unittest框架适合selenium自动化，接口测试。
 
+
+# coding:utf-8
+import threading
+from datetime import *
+import requests
+# import urllib3
+# urllib3.disable_warnings()
+theadnum = 2
+fornum = 2
+def test1():
+    global fornum
+    for i in range(fornum):
+        u = "https://www.baidu.com/s?wd=12306&rsv_spt=1&rsv_iqid=0x9cb46ced00190cc2&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&tn=baiduhome_pg&rsv_enter=1&rsv_dl=ib&rsv_sug3=6&rsv_sug1=4&rsv_sug7=100&rsv_sug2=0&inputT=1465&rsv_sug4=3426"
+        head = {
+            "Host": "news.baidu.com",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Upgrade-Insecure-Requests": "1",
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Safari/605.1.15",
+            "Referer": "http://news.baidu.com/",
+            "Accept-Encoding": "gzip,deflate",
+            "Accept-Language": "zh-cn",
+            "Connection": "keep-alive"
+        }
+        r = requests.get(url=u,headers=head)
+
+        print("测试用用例1：",r.status_code)
+        #print(r.text)
+        print("===============")
+
+def test2():
+    u = "https://www.baidu.com/s?wd=%E6%B5%8B%E8%AF%95&rsv_spt=1&rsv_iqid=0xe3cf335e001a8bc2&issp=1&f=8&rsv_bp=1&rsv_idx=2&ie=utf-8&rqlang=cn&tn=baiduhome_pg&rsv_enter=1&rsv_dl=tb&rsv_t=eaeajPeLFzouY%2BMmqnN9Ht8tZf9nNoA0wLSsZuu2WsGDSEccCWa32YtqLITC2YWed3Jl&rsv_sug3=15&rsv_sug1=13&rsv_sug7=100&oq=12%2526lt%253B06&rsv_pq=b76902bb005ceced&rsv_sug2=0&inputT=3066&rsv_sug4=4536"
+    head = {
+        "Host": "news.baidu.com",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Upgrade-Insecure-Requests": "1",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.4 Safari/605.1.15",
+        "Referer": "http://news.baidu.com/",
+        "Accept-Encoding": "gzip,deflate",
+        "Accept-Language": "zh-cn",
+        "Connection": "keep-alive"
+    }
+    r = requests.get(url=u, headers=head)
+
+    print("测试用用例2：",r.status_code)
+    #print("测试用用例2：",r.text)
+    print("===============")
+
+#批量执行test测试用例
+def working():
+    global fornum
+    for i in range(fornum):
+        test1()
+        test2()
+
+def thd():
+    global theadnum
+    Threads = []
+    for i in range(theadnum):
+        t = threading.Thread(target=working(),name="test"+str(i))
+        t.setDaemon(True)
+        Threads.append(t)
+    for t in Threads:
+        t.start()
+    for t in Threads:
+        t.join(2)
+if __name__=="__main__":
+    thd()
