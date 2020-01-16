@@ -31,7 +31,7 @@ class shangchuan(unittest.TestCase):
             "Cookie":"jeeplus.session.id=73fbd19baa60445b898346430133bf6b",
             #"Content-Type":"multipart/form-data; boundary=---------------------------27521722226298",
             "Content-Disposition":"form-data"
-
+   
 
         }
         self.files = {"pictures":open("C:/Users/Mr_yang/Desktop/123.png","rb")}
