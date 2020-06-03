@@ -351,11 +351,12 @@ if __name__=="__main__":
 
 # coding:utf-8
 from locust import HttpLocust,task,TaskSet
+from locust.clients import HttpSession
 import random
 import json
 class UserBehavior(TaskSet):
 	
-	def start_on(self):
+	def on_start(self):
 		u = "http://47.104.82.246/"
 		path = "/a/login"
 		data = {
