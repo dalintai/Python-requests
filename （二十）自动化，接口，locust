@@ -364,6 +364,7 @@ class UserBehavior(TaskSet):
 			"password":"****"
 		}
     #获取出session
+    		#如果报错提示说是没有头部，那就需要改成HttpSession(("http://10.126.169.219:8088")
 		self.session = HttpSession(self.host)
 		r = self.client.post(url=u+path,data=data)
 		print("状态码",r.status_code)
