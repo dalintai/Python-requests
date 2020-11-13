@@ -1,5 +1,131 @@
 一、背景说明
 
+参考博客：https://blog.csdn.net/j_akill/article/details/43560293
+https://blog.csdn.net/qq_39802740/article/details/84257745（重点查看）
+
+============================================================
+更新于2020/11/13
+主要包含使用requests进行图片上传，同时改成了locust性能接口测试
+
+============================================================
+
+这是图片上传的接口：
+
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="id"
+WU_FILE_0
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="name"
+1234.png
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="type"
+image/png
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="lastModifiedDate"
+2020/11/13 ä¸å2:19:57
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="size"
+246589
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="chunkSize"
+4194304
+-----------------------------25104338983364825788581849452
+Content-Disposition: form-data; name="multiFile"; filename="1234.png"
+Content-Type: image/png
+PNG
+
+
+以下是图片上传接口的locust实现方式：
+
+# coding:utf-8
+from locust import TaskSet,task,HttpLocust
+from locust.clients import HttpSession
+from time import sleep
+import requests
+import json
+import random
+
+class UserBehavior(TaskSet):
+	@task(1)
+	def tset_A_login(self):
+		u = "10.10.65.143:"
+		port = "82"
+		path = "/ksh-test/a?login"
+		head = {
+			"Host": "10.10.65.143:82",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+			"Accept": "*/*",
+			"Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+			"Accept-Encoding": "gzip, deflate",
+      
+			#根据上面的第二篇博客来看，“Content-Type”一定要注释掉，不要再头部体现
+			#然后因为使用的是multipart/form-data类型，所以传值时候一定要用files进行传
+			#"Content-Type": "multipart/form-data; boundary=---------------------------25104338983364825788581849452",
+      
+			"Content-Length": "247543",
+			"Origin": "http://10.10.65.143:82",
+			"DNT": "1",
+			"Connection": "keep-alive",
+			"Referer": "http://10.10.65.143:82/ksh-test/a/ksh/kshChangeImplementApply/form",
+			"Cookie": "jeeplus.session.id=70a32edc53b34914bad56aa260e2b50e; pageNo=1; pageSize=10",
+			"Upgrade-Insecure-Requests":"1"
+		}
+
+
+		files={'id':(None,'WU_FILE_0'),
+		    'name':(None,'1234.png'),
+		    'type':(None,'image/png'),
+		    'lastModifiedDate':(None,'2020/11/13'),
+		    'size':(None,'246589'),
+		    'chunkSize':(None,'4194304'),
+		    'multiFile':('1234.png',open("C:/Users/IEDS/Pictures/Saved Pictures/1234.png","rb"),'image/png')
+		    
+		 }
+
+
+		data = {
+				"username":"fjglyA",
+				"password":",ki89ol./;p0"
+		}
+		r = self.client.post("http://10.10.65.143:82/ksh-test/a/tools/slf/uploadFile",headers=head,files=files)
+		print("访问地址：",r.url)
+		print("状态码：",r.status_code)
+		print("响应:",r.text)
+
+class WebsiteUser(HttpLocust):
+	task_set = UserBehavior
+	max_wait = 6000
+	min_wait = 3000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==========================================================
+以下是旧代码，部分详细未做说明，编写时还是要使用上述代码
+
+==========================================================
+
 说明：
   在对一个图片上传的接口进行测试时，出现图片成功上传到服务器，但是未在前端页面展示出来，通过抓包发现以下区别：
   正常上传：
