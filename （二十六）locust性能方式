@@ -1,0 +1,137 @@
+一、说明
+本次locust包含三个接口：
+  1.登录
+  2.添加文件
+  3.上传图片
+  
+  说明：后面两个接口还是主要使用的是通过头部的cookies来进行请求的，后续进行更新，调用session方式
+  
+  # coding:utf-8
+from locust import TaskSet,task,HttpLocust
+from locust.clients import HttpSession
+from time import sleep
+import requests
+import json
+import random
+
+class UserBehavior(TaskSet):
+	#登录
+	@task(1)
+	#def on_start(self):
+	def test_A_login(self):
+		head = {
+			"Host": "10.10.65.143:82",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+			"Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+			"Accept-Encoding": "gzip, deflate",
+			"Content-Type": "application/x-www-form-urlencoded",
+			"Content-Length": "42",
+			"Origin":"http://10.10.65.143:82",
+			"DNT": "1",
+			"Connection": "keep-alive",
+			"Referer":"http://10.10.65.143:82/ksh-test/a/login",
+			"Cookie": "jeeplus.session.id=9d0c96f83766472a9db72a263e6e5c64",
+			"Upgrade-Insecure-Requests": "1"
+
+		}
+		data = {
+			"username":"fjglyA",
+			"password":",ki89ol./;p0"
+		}
+		self.session = HttpSession("http://10.10.65.143:82/ksh-test/a/login")
+		r = self.session.post("http://10.10.65.143:82/ksh-test/a/login",headers=head,data=data)
+		print("请求地址：",r.url)
+		print("状态码：",r.status_code)
+		print("响应：",r.text)
+
+	#信息填写
+	@task(1)
+	def test_B_add(self):
+		head = {
+			"Host": "10.10.65.143:82",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+			"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+			"Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+			"Accept-Encoding": "gzip, deflate",
+			"Content-Type": "application/x-www-form-urlencoded",
+			"Content-Length": "42",
+			"Origin":"http://10.10.65.143:82",
+			"DNT": "1",
+			"Connection": "keep-alive",
+			"Referer":"http://10.10.65.143:82/ksh-test/a/login",
+			"Cookie": "jeeplus.session.id=4770cbefd3864b2db82fe7c1cc75a81c; pageNo=1; pageSize=10",
+			"Upgrade-Insecure-Requests": "1"
+
+			}
+		cookies = {
+			"Cookie": "jeeplus.session.id=4770cbefd3864b2db82fe7c1cc75a81c; pageNo=1; pageSize=10"
+		}
+		data = {
+			"id":"",
+			"name":str('test')+str(random.randint(1,100)),
+			"projectType":"1",
+			"unit":"f3162488949843b3a56e176539c3d61b",
+			"constructionYear":"2020",
+			"startDate":"2020-11-09",
+			"endDate":"2020-12-12",
+			"constructionStage":"2"
+			}
+		c = self.client.post("http://10.10.65.143:82/ksh-test/a/ksh/kshProject/save",headers=head,data=data)
+		print("请求地址：",c.url)
+		print("状态码：",c.status_code)
+		print("响应：",c.text)
+    
+    
+	@task(1)
+	#图片上传
+	def tset_C_shangchuan(self):
+		u = "10.10.65.143:"
+		port = "82"
+		path = "/ksh-test/a?login"
+		head = {
+			"Host": "10.10.65.143:82",
+			"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+			"Accept": "*/*",
+			"Accept-Language": "zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+			"Accept-Encoding": "gzip, deflate",
+			#根据上面的第二篇博客来看，“Content-Type”一定要注释掉，不要再头部体现
+			#然后因为使用的是multipart/form-data类型，所以传值时候一定要用files进行传
+			#"Content-Type": "multipart/form-data; boundary=---------------------------25104338983364825788581849452",
+      
+			"Content-Length": "247543",
+			"Origin": "http://10.10.65.143:82",
+			"DNT": "1",
+			"Connection": "keep-alive",
+			"Referer": "http://10.10.65.143:82/ksh-test/a/ksh/kshChangeImplementApply/form",
+			"Cookie": "jeeplus.session.id=70a32edc53b34914bad56aa260e2b50e; pageNo=1; pageSize=10",
+			"Upgrade-Insecure-Requests":"1"
+		}
+
+
+		files={'id':(None,'WU_FILE_0'),
+		    'name':(None,'1234.png'),
+		    'type':(None,'image/png'),
+		    'lastModifiedDate':(None,'2020/11/13'),
+		    'size':(None,'246589'),
+		    'chunkSize':(None,'4194304'),
+		    'multiFile':('1234.png',open("C:/Users/IEDS/Pictures/Saved Pictures/1234.png","rb"),'image/png')
+		    
+		 }
+
+
+		data = {
+				"username":"fjglyA",
+				"password":",ki89ol./;p0"
+		}
+		f = self.client.post("http://10.10.65.143:82/ksh-test/a/tools/slf/uploadFile",headers=head,files=files)
+		print("访问地址：",f.url)
+		print("状态码：",f.status_code)
+		print("响应:",f.text)
+
+
+class WebsiteUser(HttpLocust):
+	task_set = UserBehavior
+	min_wait = 3000
+	max_wait = 6000
+
