@@ -1,0 +1,89 @@
+说明：
+  首先email跟smtplib的包比较难装，使用pycharm随便装了一下，最后不知道怎么成功的。
+  然后就是线程循环要在def里面做，而不是重新起一个循环，这个也要注意
+
+
+
+#首先要导入smtp跟email的包
+from email.mime.text import MIMEText
+from time import ctime
+import smtplib
+import time 
+#导入线程
+import threading
+
+def youjian():
+    #for i in range(10):
+    
+#============  邮件操作  ====================
+
+        #设置服务器所需信息
+        #邮箱服务器地址
+        mail_host = 'mail.impc.com.cn'
+        #发送方用户名
+        mail_user = 'test1@impc.com.cn'
+        #密码(部分邮箱为授权码)
+        mail_pass = 'kedian123.com'
+        #邮件发送方邮箱地址
+        sender = 'test1@impc.com.cn'
+        #邮件接受方邮箱地址，注意需要[]包裹，这意味着你可以写多个邮件地址群发
+        receivers = 'ceshi1@impc.com.cn'
+        #设置email信息
+        #邮件内容的编码格式，与内容
+        message = MIMEText('content','plain','UTF-8')
+        message['Subject'] = '多线程,qingchshou,zheshi womende neirong'
+        #发送方信息
+        message['From'] = sender
+        #接受方信息
+        message['To'] = receivers
+        #登录并发送邮件
+        smtpObj = smtplib.SMTP()
+            #连接到服务器，SMTP的默认端口是25
+        smtpObj.connect(mail_host,25)
+            #登录到服务器
+        smtpObj.login(mail_user,mail_pass)
+            #发送
+        smtpObj.sendmail(
+                sender,receivers,message.as_string())
+            #退出
+        smtpObj.quit()
+        print('send success')
+        
+#============  多线程操作  ====================
+
+#def里面进行新建线程
+        threads = []
+#然后指向方法名
+        t1 =  threading.Thread(target=youjian)
+
+#最后就是线程循环数，固定式
+        for i in range(1):
+            c = threading.Thread(target=youjian())
+            Threads.append(c)
+        for c in Threads:
+            c.start()
+        for c in Threads:
+            t.join(2)
+#直接执行方法名
+if __name__ == '__main__':
+    youjian()
+    print('end')
+    
+    
+    
+   
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
