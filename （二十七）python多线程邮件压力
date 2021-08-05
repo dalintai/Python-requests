@@ -71,6 +71,17 @@ if __name__ == '__main__':
     
     
     
+备注：
+  之前准备在邮件的代码里面输出时间戳，但怎么都不行，然后调试发现，是输出写错了
+import time
+
+#这是直接调用a的写法
+a = "time.ctime() : %s"%time.ctime()
+print (a)
+
+#这是第二种写法
+print("time,ctime:%s"%time.ctime())
+    
    
     
     
