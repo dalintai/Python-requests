@@ -1,2 +1,99 @@
 一、说明
-     这是一款类似requests的库，但优点就是支持了异步操作，之前研究python的多线程，requests，接下来可以尝试下接口测试使用httpx库
+     这是一款类似requests的库，但优点就是支持了异步操作，之前研究python的多线程，requests，接下来可以尝试下接口测试使用httpx库。
+     
+二、代码
+
+解释：首先直接使用httpx比较简单，就是将requests库直接替换成httpx，然后在请求的时候将requests.post改成httpx.post就可以，注意的是，
+如果是locust，不能直接用requests与httpx，必须是self.client.post。
+
+最主要的就是httpx的异步，异步一定得使用他async的类，然后在这个类里面进行请求，然后再执行，后面想办法看看能不能异步加多线程，主要还
+有个问题就是，就算把代码优化多线程，异步，理论上会提高负载，但实际上没有一个很好的监控，所以就有点鸡肋了。
+
+# coding:utf-8
+#from locust import HttpUser,task,User
+
+import httpx
+#需要导入asyncio的库，有好几个，还需要继续研究
+import asyncio
+import requests
+import random
+#class QuitstartUser():
+	#@task(1)
+
+
+	#h = self.client.post(url=url+port+path,headers=head,data=data)
+
+
+	
+	async def main():
+			async with httpx.AsyncClient() as client:
+	 			url = "http://10.10.65.53"
+	 			port = ":8080"
+	 			path = "/stimp/a?login"
+	 			head = {
+	 				"Host":"10.10.65.53:8080",
+	 				"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+	 				"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+	 				"Accept-Language":"zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+	 				"Accept-Encoding":"gzip, deflate",
+	 				"Content-Type":"application/x-www-form-urlencoded",
+	 				"Content-Length":"29",
+	 				"Origin":"http://10.10.65.53:8080",
+	 				"DNT":"1",
+	 				"Connection":"keep-alive",
+	 				"Referer":"http://10.10.65.53:8080/stimp/a/login",
+	 				"Cookie":"jeeplus.session.id=5e338b2476aa4161b5682fa10e93e8d3",
+	 				"Upgrade-Insecure-Requests":"1"
+	 			}
+	 			data = {
+	 					"username":"caishu",
+	 					"password":"8888"
+	 				}
+                         
+                         
+                    #当使用异步的时候，首先要在async方法下，然后请求的时候也得使用await client.post
+	 			h = await client.post(url=url+port+path,headers=head,data=data)
+                    #如果只是普通用httpx请求,就直接httpx.post就可以了
+                    #h = httpx.post(url=url+port+path,headers=head,data=data)
+                    
+                    
+	 			print(h.url)
+	 			#print(h.text)
+	 			print("异步1",h.status_code)
+	async def main2():
+			async with httpx.AsyncClient() as client:
+				url = "http://10.10.65.53"
+				port = ":8080"
+				path = "/stimp/a/news/stimpNews"
+				head = {
+					"Host":"10.10.65.53:8080",
+					"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0",
+					"Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+					"Accept-Language":"zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2",
+					"Accept-Encoding":"gzip, deflate",
+					"Content-Type":"application/x-www-form-urlencoded",
+					#"Content-Length":"57",
+					"Origin":"http://10.10.65.53:8080",
+					"DNT":"1",
+					"Connection":"keep-alive",
+					"Referer":"http://10.10.65.53:8080/stimp/a/news/stimpNews",
+					"Cookie":"jeeplus.session.id=5e338b2476aa4161b5682fa10e93e8d3;pageNo=1;pageSize=10",
+					"Upgrade-Insecure-Requests":"1"
+				}
+				data = {
+						"pageNo":"1",
+						"pageSize":"10",
+						"orderBy":"",
+						"title":"",
+						"releaseTime":"",
+						"status":""
+					}
+				h = await client.post(url=url+port+path,headers=head,data=data)
+				print(h.url)
+				#print(h.text)
+				print("异步2",h.status_code)
+			
+if __name__ == '__main__':
+# 	QuitstartUser.test_denglu()
+	asyncio.run(main())
+	asyncio.run(main2())
